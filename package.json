@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/karissa/dps/issues"
   },
-  "homepage": "https://github.com/karissa/dps"
+  "homepage": "https://github.com/karissa/dps",
+  "dependencies": {
+    "subcommand": "^2.0.2"
+  }
 }
