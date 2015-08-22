@@ -1,0 +1,19 @@
+{
+  "name": "dps",
+  "version": "1.0.0",
+  "description": "data per second (a data package system)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karissa/dps.git"
+  },
+  "author": "Karissa McKelvey <karissa@karissamck.com> (http://karissamck.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karissa/dps/issues"
+  },
+  "homepage": "https://github.com/karissa/dps"
+}
