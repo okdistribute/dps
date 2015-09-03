@@ -8,31 +8,31 @@ With open data comes a price. Tracking and managing many urls from which you har
 
 Enter dps.
 
-### dps add <name/url>
+### `dps add <name/url>`
   * name will be found through any 'tracked' registries.
   * url could be the url of anything that gives data with HTTP GET
 
-### dps list
+### `dps list`
   * see list of all tracked data
 
-### dps create <command>
+### `dps create <command>`
   * create a scraper
   * instead of adding a url, add a local scraper.
   * will have to specify the command to run. the command should output data on stdout
 
-### dps search <keyword>
+### `dps search <keyword>`
   * does a search through the tracker metadata
 
-### dps update [dataset] [--trackers]
+### `dps update [dataset] [--trackers]`
   * updates a given dataset, or all datasets.
   * fetches the dataset via the given HTTP url
   * `--trackers` updates only the trackers, not the data.
 
-### dps track <url>
+### `dps track <url>`
   * add a tracker that will be searchable through 'dps search'
 
-### dps trackers
+### `dps trackers`
   * see all trackers
 
-### dps publish <url> <tracker>
+### `dps publish <url> <tracker>`
   * publish the url to a given tracker
