@@ -1,0 +1,19 @@
+dps add <location> [name]
+
+  Adds a data source to the trackable local or global dps repository.
+
+Parameters:
+
+  <location>: required
+
+    URL or filepath of the data source.
+
+  [name]: optional
+
+    A user-friendly name for the data source.
+
+Options:
+
+  --global (-g)
+
+    Stores the dataset in a globally accessible location. dps will always prefer locally installed versions of a dataset, but this can be overridden with --global (-g).

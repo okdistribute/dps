@@ -1,0 +1,19 @@
+dps update [name]
+
+  Updates all tracked datasets to their most recent distributions.
+
+Parameters:
+
+  [name]: optional
+
+    Will update only the dataset with the given name.
+
+Options:
+
+  --trackers
+
+    Will update only the tracker metadata for dps search, not the datasets themselves.
+
+  --dry-run
+
+    Will output a list of all datasets that would be updated.

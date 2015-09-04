@@ -1,0 +1,16 @@
+dps track <url>
+
+  Adds the given url to the list of available data repositories from a data portal, registry, or servicer. These provide metadata accessible with dps search.
+
+Parameters:
+
+  <url>: required
+
+    The url to add to the tracker.
+
+Options:
+
+  --remove
+
+    Remove the given url from the list of tracked urls.
+

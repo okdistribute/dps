@@ -19,7 +19,7 @@ With open data comes a price. Tracking and managing many urls from which you har
   * updates a given dataset, or all datasets.
   * fetches the dataset via the given HTTP url
   * `--trackers` updates only the trackers, not the data.
-  
+
 ### `dps list [--trackers]`
   * see list of all tracked data (metadata, names)
   * --trackers lists only trackers
@@ -45,4 +45,4 @@ With open data comes a price. Tracking and managing many urls from which you har
   * if name not supplied, will mount all the datasets currently tracked by dps
   * mounts the data in docker in the database of your choice. uses postgres by default
   * must have docker4data installed
-  * can specify container 
+  * can specify container
