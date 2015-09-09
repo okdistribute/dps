@@ -1,6 +1,6 @@
 # dps (data per second)
 
-Search and manage datasets. This is mostly vaporware at the moment.
+Search and manage datasets. This is mostly vaporware.
 
 [![NPM](https://nodei.co/npm/dps.png)](https://nodei.co/npm/dps/)
 
@@ -22,6 +22,10 @@ Enter dps.
 
 ### `dps search <keyword>`
   * does a search through the tracker metadata
+
+### `dps mount <database>`
+  * mounts the data in docker in the database of your choice. uses postgres by default
+  * must have docker4data installed
 
 ### `dps update [dataset] [--trackers]`
   * updates a given dataset, or all datasets.
