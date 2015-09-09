@@ -24,7 +24,7 @@ Enter dps.
 ### `dps search <keyword>`
   * does a search through the tracker metadata
 
-### `dps mount <database>`
+### `dps mount [name] [--database=<name>]`
   * mounts the data in docker in the database of your choice. uses postgres by default
   * must have docker4data installed
 
