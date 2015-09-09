@@ -12,10 +12,12 @@ Enter dps.
   * name will be found through any 'tracked' registries.
   * url could be the url of anything that gives data with HTTP GET (not in a tracked registry)
   * auto-detects dat endpoints and tracks version changes
+  * `dps update` will triger the re-download of this data
 
 ### `dps add <script> [<name>]`
   * will add a script, which should output data to stdout.
   * can be referenced by optional name
+  * `dps update` will triger the re-running of this script
 
 ### `dps list [--trackers]`
   * see list of all tracked data (metadata, names)
