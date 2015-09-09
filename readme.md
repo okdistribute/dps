@@ -8,9 +8,13 @@ With open data comes a price. Tracking and managing many urls from which you har
 
 Enter dps.
 
-### `dps add <name/url>`
+### `dps get <name/url>`
   * name will be found through any 'tracked' registries.
   * url could be the url of anything that gives data with HTTP GET
+  * auto-detects dat endpoints and tracks version changes
+
+### `dps add <script> <name>`
+  * will add a script, which should output data to stdout.
 
 ### `dps list`
   * see list of all tracked data
@@ -38,5 +42,6 @@ Enter dps.
 ### `dps trackers`
   * see all trackers
 
-### `dps publish <url> <tracker>`
-  * publish the url to a given tracker
+### `dps publish <tracker> [-c <config-file>]`
+  * publish the metadata to the given tracker, including scripts to pull down data with `dat add`
+  * will use ./dps.json if config-file isn't specified
