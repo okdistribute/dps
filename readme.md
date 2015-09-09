@@ -20,11 +20,6 @@ Enter dps.
 ### `dps list`
   * see list of all tracked data
 
-### `dps create <command>`
-  * create a scraper
-  * instead of adding a url, add a local scraper.
-  * will have to specify the command to run. the command should output data on stdout
-
 ### `dps search <keyword>`
   * does a search through the tracker metadata
 
