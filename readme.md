@@ -24,9 +24,11 @@ Enter dps.
 ### `dps search <keyword>`
   * does a search through the tracker metadata
 
-### `dps mount [name] [--database=<name>]`
+### `dps mount [name] [--database=<name>] [--container=<container>]`
+  * if name not supplied, will mount all the datasets currently tracked by dps
   * mounts the data in docker in the database of your choice. uses postgres by default
   * must have docker4data installed
+  * can specify container 
 
 ### `dps update [dataset] [--trackers]`
   * updates a given dataset, or all datasets.
