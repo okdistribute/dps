@@ -17,8 +17,9 @@ Enter dps.
   * will add a script, which should output data to stdout.
   * can be referenced by optional name
 
-### `dps list`
-  * see list of all tracked data
+### `dps list [--trackers]`
+  * see list of all tracked data (metadata, names)
+  * --trackers lists only trackers
 
 ### `dps search <keyword>`
   * does a search through the tracker metadata
@@ -34,9 +35,6 @@ Enter dps.
 
 ### `dps track <url>`
   * add a tracker that will be searchable through 'dps search'
-
-### `dps trackers`
-  * see all trackers
 
 ### `dps publish <tracker> [-c <config-file>]`
   * publish the metadata to the given tracker, including scripts to pull down data with `dat add`
