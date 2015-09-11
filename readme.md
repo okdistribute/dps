@@ -1,10 +1,8 @@
 # dps (data per second)
 
-Search and manage datasets. This is mostly vaporware.
+Search, manage, and update datasets. **This is mostly vaporware at the moment.**
 
 With open data comes a price. Tracking and managing many urls from which you harvest data APIs can be a nightmare, let alone if you have custom scraping processes to clean that data! This will quickly become a desktop application that maps point-and-click functions to commandline features.
-
-Enter dps.
 
 ## CLI api (first pass)
 
