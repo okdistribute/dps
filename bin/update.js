@@ -1,6 +1,6 @@
 var sources = require('../lib/sources.js')
 var usage = require('../lib/usage.js')('update.txt')
-var update = require('../lib/download.js')
+var download = require('../lib/download.js')
 
 module.exports = {
   name: 'update',

@@ -25,6 +25,7 @@ function handleAdd (args) {
 
   var source = {
     name: name,
+    path: name,
     location: location,
     format: args.format,
     type: args.type
