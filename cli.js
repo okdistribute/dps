@@ -4,7 +4,8 @@ var subcommand = require('subcommand')
 var config = {
   root: require('./bin/root.js'),
   commands: [
-    require('./bin/add.js')
+    require('./bin/add.js'),
+    require('./bin/update.js')
   ],
   defaults: require('./bin/defaults.js'),
   none: noMatch
