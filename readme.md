@@ -4,9 +4,11 @@ Search and manage datasets. This is mostly vaporware.
 
 [![NPM](https://nodei.co/npm/dps.png)](https://nodei.co/npm/dps/)
 
-With open data comes a price. Tracking and managing many urls from which you harvest data APIs can be a nightmare, let alone if you have custom scraping processes to clean that data!
+With open data comes a price. Tracking and managing many urls from which you harvest data APIs can be a nightmare, let alone if you have custom scraping processes to clean that data! This will quickly become a desktop application that maps point-and-click functions to commandline features.
 
 Enter dps.
+
+## CLI api (first pass)
 
 ### `dps get <name/url>`
   * name will be found through any 'tracked' registries.
