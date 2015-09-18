@@ -1,6 +1,6 @@
 var path = require('path')
 var download = require('../lib/download.js')
-var sources = require('../lib/sources.js')
+var sources = require('../lib/config.js')
 var usage = require('../lib/usage.js')('add.txt')
 
 module.exports = {
@@ -37,6 +37,6 @@ function handleAdd (args) {
   })
 
   function success () {
-    sources.add(source)
+    sources.addSource(source, args)
   }
 }

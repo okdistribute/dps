@@ -1,4 +1,4 @@
-var sources = require('../lib/sources.js')
+var config = require('../lib/config.js')
 var usage = require('../lib/usage.js')('update.txt')
 var download = require('../lib/download.js')
 
@@ -10,7 +10,7 @@ module.exports = {
 
 function handleUpdate (args) {
   var name = args._[0]
-  var sourceList = sources.read().sources
+  var sourceList = config.read(args).sources
 
   if (name) return updateOne(sourceList[name])
 

@@ -6,6 +6,7 @@ var config = {
   commands: [
     require('./bin/add.js'),
     require('./bin/update.js')
+//    require('./bin/status.js')
   ],
   defaults: require('./bin/defaults.js'),
   none: noMatch
