@@ -1,6 +1,6 @@
 var path = require('path')
 var download = require('../lib/download.js')
-var sources = require('../lib/config.js')
+var config = require('../lib/config.js')
 var usage = require('../lib/usage.js')('add.txt')
 
 module.exports = {
@@ -21,7 +21,11 @@ module.exports = {
 
 function handleAdd (args) {
   var location = args._[0]
-  var name = args._[1] || sources.normalize(args._[0])
+  var name = args._[1] || normalize(args._[0])
+
+  var sources = config.read(args).sources
+
+  if (sources[name]) return console.error('Source exists.')
 
   var source = {
     name: name,
@@ -39,4 +43,8 @@ function handleAdd (args) {
   function success () {
     sources.addSource(source, args)
   }
+}
+
+function normalize (source) {
+  return source.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
 }
