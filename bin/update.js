@@ -1,6 +1,6 @@
-var config = require('../lib/config.js')
-var usage = require('../lib/usage.js')('update.txt')
-var download = require('../lib/download.js')
+var config = require('../lib/util/config.js')
+var usage = require('../lib/util/usage.js')('update.txt')
+var download = require('../lib/util/download.js')
 
 module.exports = {
   name: 'update',

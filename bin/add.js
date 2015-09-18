@@ -1,7 +1,7 @@
 var path = require('path')
-var download = require('../lib/download.js')
-var config = require('../lib/config.js')
-var usage = require('../lib/usage.js')('add.txt')
+var download = require('../lib/util/download.js')
+var config = require('../lib/util/config.js')
+var usage = require('../lib/util/usage.js')('add.txt')
 
 module.exports = {
   name: 'add',
@@ -21,14 +21,13 @@ module.exports = {
 
 function handleAdd (args) {
   var location = args._[0]
-  var name = args._[1] || normalize(args._[0])
+  var id = args._[1] || normalize(args._[0])
 
   var sources = config.read(args).sources
 
-  if (sources[name]) return console.error('Source exists.')
+  if (sources[id]) return console.error('Source exists.')
 
   var source = {
-    name: name,
     path: name,
     location: location,
     format: args.format,
@@ -41,7 +40,7 @@ function handleAdd (args) {
   })
 
   function success () {
-    sources.addSource(source, args)
+    config.addSource(id, source, args)
   }
 }
 
