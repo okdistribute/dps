@@ -1,10 +1,8 @@
 var path = require('path')
-var Ractive = require('ractive')
+var Ractive = require('ractive-toolkit')
 var page = require('page')
 var fs = require('fs')
 var ipc = require('ipc')
-var prettyBytes = require('pretty-bytes')
-var relativeDate = require('relative-date')
 
 var dps = require('..')
 var configSync = require('../lib/util/config.js')
@@ -12,6 +10,7 @@ var configSync = require('../lib/util/config.js')
 function getSources () {
   var args = {}
   var config = configSync.read(args)
+  console.log(config.sources)
   return config.sources
 }
 
@@ -29,9 +28,10 @@ var events = {
   refresh: function (event, name) {
     var self = this
     var args = {}
-    dps.update(name, args, function (err) {
+    dps.update(name, args, function (err, source) {
       if (err) return onerror(err)
-      self.set('sources', getSources())
+      var sources = getSources()
+      self.set('sources', sources)
     })
   },
   add: function () {
@@ -73,14 +73,4 @@ function render (ctx) {
 
   ract.on(events)
   return ract
-}
-
-var templateHelpers = Ractive.defaults.data
-
-templateHelpers.prettyBytes = function (bytes) {
-  return prettyBytes(bytes)
-}
-
-templateHelpers.relativeDate = function (iso) {
-  return relativeDate(new Date(iso))
 }

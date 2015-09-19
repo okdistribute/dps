@@ -26,9 +26,11 @@
     "page": "^1.6.3",
     "pretty-bytes": "^2.0.1",
     "progress": "^1.1.8",
+    "pump": "^1.0.0",
     "ractive": "^0.7.3",
     "relative-date": "^1.1.2",
     "rimraf": "^2.4.3",
+    "run-parallel": "^1.1.2",
     "silence-chromium": "^2.0.0",
     "subcommand": "^2.0.2"
   },

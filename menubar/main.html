@@ -2,8 +2,8 @@
   {{#each sources}}
   <ul class="list">
     <li class="list-item">
-      <h3>{{ this.id }}</h3>
-      <p>{{ this.last_updated | relativeDate }}</p>
+      <h3>{{this.id}}</h3>
+      <p>{{relativeDate(this.last_updated)}}</p>
       <a href="#" on-click="refresh:{{this.id}}">update</a>
     </li>
   </ul>
