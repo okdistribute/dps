@@ -7,8 +7,7 @@ module.exports = {
   options: [
     {
       name: 'type',
-      boolean: false,
-      default: 'http'
+      boolean: false
     },
     {
       name: 'format',

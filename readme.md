@@ -9,7 +9,7 @@ With open data comes a price. Tracking and managing many urls from which you har
 ### `dps init`
   * create a contained project environment so you can have multiple projects with different data versions
 
-### `dps get <name/url>`
+### `dps add <name/url>`
   * name will be found through any 'tracked' registries.
   * url could be the url of anything that gives data with HTTP GET (not in a tracked registry)
   * auto-detects dat endpoints and tracks version changes

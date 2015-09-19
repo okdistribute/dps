@@ -1,0 +1,15 @@
+<div class="sources">
+  {{#each sources}}
+  <ul class="list">
+    <li class="list-item">
+      <h3>{{ this.id }}</h3>
+      <p>{{ this.last_updated | relativeDate }}</p>
+      <a href="#" on-click="refresh:{{this.id}}">update</a>
+    </li>
+  </ul>
+  {{/each}}
+</div>
+<div class="add">
+  <input type="text" placeholder="url to a data source" value="{{location}}"/>
+  <button class="button" on-click="add">add</button>
+</div>

@@ -4,7 +4,7 @@
   "description": "data per second (a data package system)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron menubar.js 2>&1 | silence-chromium"
   },
   "bin": {
     "dps": "./cli.js"
@@ -22,7 +22,17 @@
   "dependencies": {
     "debug": "^2.2.0",
     "got": "^4.1.1",
+    "menubar": "^2.2.1",
+    "page": "^1.6.3",
+    "pretty-bytes": "^2.0.1",
     "progress": "^1.1.8",
+    "ractive": "^0.7.3",
+    "relative-date": "^1.1.2",
+    "rimraf": "^2.4.3",
+    "silence-chromium": "^2.0.0",
     "subcommand": "^2.0.2"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^0.33.0"
   }
 }
