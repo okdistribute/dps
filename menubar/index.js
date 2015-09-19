@@ -30,8 +30,7 @@ var events = {
     var args = {}
     dps.update(name, args, function (err, source) {
       if (err) return onerror(err)
-      var sources = getSources()
-      self.set('sources', sources)
+      self.set('sources', getSources())
     })
   },
   add: function () {

@@ -1,0 +1,39 @@
+*, *:before {
+  box-sizing: border-box;
+  position: relative;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-size: cover;
+  font: 14px/1.4 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+h2 {
+  font-size: 1.4em;
+  font-weight: 300;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.muted {
+  color: #888;
+  font-size: 12px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  padding: 20px;
+}
+
+.list {
+  border-bottom: 1px solid #ccc;
+}

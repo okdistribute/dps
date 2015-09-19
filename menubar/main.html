@@ -1,15 +1,18 @@
-<div class="sources">
+<div class="container">
   {{#each sources}}
-  <ul class="list">
-    <li class="list-item">
-      <h3>{{this.id}}</h3>
-      <p>{{relativeDate(this.last_updated)}}</p>
+  <div class="list">
+    <div class="list-item">
+      <h2>{{this.id}}</h2>
+      <div class="muted pull-right">{{relativeDate(this.last_updated)}}</div>
+  </div>
+    <div class="controls">
       <a href="#" on-click="refresh:{{this.id}}">update</a>
-    </li>
-  </ul>
+      <a href="#" on-click="open:{{this.id}}">open</a>
+    </div>
+  </div>
   {{/each}}
-</div>
-<div class="add">
-  <input type="text" placeholder="url to a data source" value="{{location}}"/>
-  <button class="button" on-click="add">add</button>
+  <div class="add">
+    <input type="text" placeholder="url to a data source" value="{{location}}"/>
+    <button class="button" on-click="add">add</button>
+  </div>
 </div>
