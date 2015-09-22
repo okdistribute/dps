@@ -1,4 +1,5 @@
 var path = require('path')
+var parallel = require('run-parallel')
 var download = require('../lib/util/download.js')
 
 CONFIG_FILE = 'dps.json'
@@ -12,7 +13,6 @@ module.exports = function (dir) {
   dps.config = readConfig(configPath)
 
   dps.add = function (location, args, cb) {
-    var this = self
     if (getSource(location)) return cb(new Error('Source exists.'))
 
     var source = {
@@ -24,6 +24,24 @@ module.exports = function (dir) {
     download(source, function (err) {
       if (err) return cb(err)
       updateSource(source)
+      cb(null, source)
+    })
+  }
+
+  dps.updateAll = function (args, cb) {
+    var tasks = []
+    for (var key in dps.config.sources) {
+      tasks.push(function (done) {
+        updateOne(sourceList[key], args, done)
+      })
+    }
+    parallel(tasks, cb)
+  }
+
+  dps.updateOne = function (source, args, cb) {
+    download(source, function (err, source) {
+      if (err) return cb(err)
+      updateSource(source, args)
       cb(null, source)
     })
   }
