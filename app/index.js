@@ -1,6 +1,8 @@
 var path = require('path')
+var elementClass = require('element-class')
 var Ractive = require('ractive-toolkit')
 var page = require('page')
+var dom = require('dom')
 var fs = require('fs')
 var ipc = require('ipc')
 
@@ -21,9 +23,6 @@ function done () {
   })
 }
 
-var templates = {
-  main: fs.readFileSync(path.join(__dirname, 'main.html')).toString()
-}
 
 var events = {
   refresh: function (event, location) {
@@ -48,17 +47,27 @@ var events = {
   }
 }
 
+var templates = {
+  search: fs.readFileSync(path.join(__dirname, 'templates', 'search.html')).toString(),
+  sources: fs.readFileSync(path.join(__dirname, 'templates', 'sources.html')).toString()
+}
+
 var routes = {
-  main: function (ctx, next) {
-    ctx.template = templates.main
+  sources: function (ctx, next) {
+    ctx.template = templates.sources
+    ctx.data = {sources: dps.config.sources}
+    render(ctx)
+  },
+  search: function (ctx, next) {
+    ctx.template = templates.search
     ctx.data = {sources: dps.config.sources}
     render(ctx)
   }
 }
 
 // set up routes
-page('/', routes.main)
-
+page('/', routes.sources)
+page('/search', routes.search)
 // initialize
 page.start()
 page('/')
@@ -69,6 +78,16 @@ function render (ctx) {
     template: ctx.template,
     data: ctx.data,
     onrender: ctx.onrender
+  })
+
+  dom('.sidebar__item').each(function (el) {
+    el[0].onclick = function (event) {
+      dom('a.sidebar__item').each(function (el) {
+        elementClass(el[0]).remove('selected')
+      })
+      var e = elementClass(this)
+      if (!e.has('selected')) e.add('selected')
+    }
   })
 
   ract.on(events)

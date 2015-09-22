@@ -3,21 +3,51 @@
   position: relative;
 }
 
+
 html, body {
   margin: 0;
   padding: 0;
 }
 
 body {
-  font: 14px/1.4; 
+  font: 14px/1.4;
+  background-color: #618861;
   font-family: 'Noto Sans', sans-serif;
+  color: white;
+  display: flex;
 }
 
-h2 {
-  font-size: 1.4em;
-  font-weight: 300;
-  color: #222;
-  margin-bottom: 10px;
+.sidebar {
+  flex-direction: column;
+  padding: 10px 0px;
+  display: flex;
+  width: 20%;
+  max-width: 200px;
+  border-right: 1px solid black;
+}
+
+.sidebar__item {
+  width: 100%;
+  padding: 15px;
+  font-size: 12px;
+  color: #ddd;
+}
+
+.sidebar__item.selected {
+  background-color: #8CBB8C !important;
+  color: white !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.20);
+}
+
+.sidebar__item:hover {
+  background-color: #76A276;
+  color: #ABCCAD;
+}
+
+
+#content {
+  padding: 40px;
+  width: 100%;
 }
 
 .muted {
@@ -30,24 +60,100 @@ a {
   color: inherit;
 }
 
-.container {
-  padding: 20px;
-  margin-top: 20px;
+.list-item {
+  background-color: #76A276;
+  color: white;
+  box-shadow: 0 1px 5px rgba(0,0,0,.25);
+  padding: 25px;
+  margin: 20px 0px;
 }
 
-.list {
-  border-bottom: 1px solid #ccc;
+.list-item:hover {
+  background-color: #8CBB8C;
+  cursor: pointer;
 }
 
-.footer {
-  border-top: 1px solid #999;
-  bottom: 0px;
+.list-item__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.list-item__header-info {
+  font-size: 12px;
+  color: #ddd;
+}
+
+.list-item__body {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ddd;
+  margin-left: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.list-item__controls {
+  margin-top: 15px;
+}
+
+.form-inline {
+  display: inline-flex;
+  width: 100%;
+}
+
+.form-inline .button {
+  width: 20%;
+}
+
+::-webkit-input-placeholder {
+  color: #ABCCAD;
+}
+
+input[type="text"] {
+  width: 80%;
+  height: 35px;
+  padding: 0px 0px 0px 10px;
+  margin: 0px;
+  border: 1px solid #ddd;
+  background-color: #507550;
+  color: white;
+  font-size: 16px;
+}
+
+input[type="text"]:focus {
+  outline: white auto;
+  outline-offset: -2px;
+}
+
+.button img {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.button:hover {
+  color: white !important;
+  cursor: pointer;
+}
+
+.button {
+  color: #eee;
+  background-color: #76A276;
+  border: 1px solid #eee;
+  vertical-align: middle;
+  font-size: 13px;
+  padding: 0px 20px;
+  height: 35px;
 }
 
 .bookend {
   position: fixed;
   width: 100%;
   padding: 10px;
+}
+
+.footer {
+  border-top: 1px solid #999;
+  bottom: 0px;
 }
 
 .header {

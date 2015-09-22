@@ -1,8 +1,12 @@
 <div class="bookend header">
   <a href="#" on-click="refresh">update all</a>
+  <div class="add">
+    <input type="text" placeholder="url to a data source" value="{{location}}"/>
+    <button class="button" on-click="add">add</button>
+  </div>
 </div>
 
-<div class="container">
+<div class="container" id="content">
   {{#each sources}}
   <div class="list">
     <div class="list-item">
@@ -10,16 +14,9 @@
       <div class="muted u-pull-right">{{relativeDate(this.last_updated)}}</div>
     </div>
     <div class="list-item-controls">
-      <a href="#" on-click="refresh:{{this.location}}"><img src="/refresh.png" /></a>
-      <a href="#" on-click="open:{{this.location}}"><img src="/external.png" /></a>
+      <a href="#" on-click="refresh:{{this.location}}"><img src="/img/refresh.png" /></a>
+      <a href="#" on-click="open:{{this.location}}"><img src="/img/external.png" /></a>
     </div>
   </div>
   {{/each}}
-</div>
-
-<div class="bookend footer">
-  <div class="add">
-    <input type="text" placeholder="url to a data source" value="{{location}}"/>
-    <button class="button" on-click="add">add</button>
-  </div>
 </div>
