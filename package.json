@@ -1,6 +1,6 @@
 {
   "name": "dps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "data per second (a data package system)",
   "main": "index.js",
   "scripts": {
