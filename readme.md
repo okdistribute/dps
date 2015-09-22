@@ -66,21 +66,19 @@ http://localhost:6442
   * auto-detects dat endpoints and tracks version changes
   * `dps update/` will triger the re-download of this data
 
-
-http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
-  checked: 2 minutes ago  modified: 3 months ago  size: 618.4 kB
-
-http://localhost:6442
-  checked: 2 minutes ago  modified: 5 hours ago  size: 4.06 kB
-
 ### `dps update [dataset] [--trackers]`
   * updates a given dataset, or all datasets.
   * fetches the dataset via the given HTTP url
   * `--trackers` updates only the trackers, not the data.
 
-### `dps list --trackers`
-  * see list of all tracked data (metadata, names)
+### `dps status`
+  * see list of all tracked data
   * --trackers lists only trackers
+
+### `dps destroy`
+  * removes everything, including the data!
+
+## federated search
 
 ### `dps search <keyword>`
   * does a search through the tracker metadata
@@ -94,10 +92,10 @@ http://localhost:6442
 
 ## advanced/experimental
 
-### `dps add <script> [<name>]`
+### `dps add --exec=<script> <name>`
   * will add a script, which should output data to stdout.
-  * can be referenced by optional name
-  * `dps update` will triger the re-running of this script
+  * referenced by given name
+  * `dps update` will trigger the re-running of this script
 
 ### `dps mount [name] [--database=<name>] [--container=<container>]`
   * if name not supplied, will mount all the datasets currently tracked by dps
