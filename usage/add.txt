@@ -11,9 +11,3 @@ Parameters:
   [name]: optional
 
     A user-friendly name for the data source.
-
-Options:
-
-  --global (-g)
-
-    Stores the dataset in a globally accessible location. dps will always prefer locally installed versions of a dataset, but this can be overridden with --global (-g).

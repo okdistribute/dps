@@ -1,21 +1,37 @@
 #!/usr/bin/env node
-var subcommand = require('subcommand')
+var args = require('minimist')(process.argv.slice(2))
+var fs = require('fs')
+var dps = require('./')
 
-var config = {
-  root: require('./bin/root.js'),
-  commands: [
-    require('./bin/add.js'),
-    require('./bin/update.js')
-//    require('./bin/status.js')
-  ],
-  defaults: require('./bin/defaults.js'),
-  none: noMatch
+var cmd = args._[0]
+
+if (cmd === 'add') {
+  var location = args._[1]
+  if (!location || args.help) return usage('dps add <location>')
+  return dps.add(location, args, function (err, source) {
+    if (err) abort(err)
+    console.log(source)
+  })
 }
 
-var route = subcommand(config)
-route(process.argv.slice(2))
+if (cmd === 'update') {
+  var location = args._[1]
+  if (!location || args.help) return usage('dps update [location]')
+  return dps.update(location, args, function (err, source) {
+    if (err) abort(err)
+    conosle.log(source)
+  })
+}
 
-function noMatch (args) {
-  console.error('dps:', args._[0], 'is not a valid command')
+
+usage(fs.readFileSync('./usage/root.txt').toString())
+
+function abort (err) {
+  console.error(err)
   process.exit(1)
+}
+
+function usage (message) {
+  console.error(message)
+  process.exit(0)
 }

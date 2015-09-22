@@ -1,6 +1,7 @@
 usage: dps <command(s)> [--flag] [--key=value]
 
 commands:
-  install     download and link from a given location (e.g., url, directory)
+  add       download source 
+  update    update sources
 
 type `dps <command> --help` to view specific command help
