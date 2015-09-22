@@ -59,6 +59,15 @@ module.exports = function (dir) {
     fs.writeFile(configPath, JSON.stringify(dps.config, null, 2), cb)
   }
 
+  dps.remove = function (key, cb) {
+    if (!key) return (cb(new Error('Remove requires a key, got', key)))
+    rimraf(dps.config.sources[key].path, function (err) {
+      delete dps.config.sources[key]
+      cb(err)
+    })
+  }
+
+
   dps.destroy = function (cb) {
     for (var key in dps.config.sources) {
       if (dps.config.sources.hasOwnProperty(key)) {

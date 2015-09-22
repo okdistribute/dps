@@ -45,7 +45,7 @@ http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
   checked: 3 minutes ago  modified: 3 months ago  size: 618.4 kB
 
 http://localhost:6442
-  checked: just now  modified: 5 hours ago  size: 4.06 kB
+  checked: 10 minutes ago modified: 5 hours ago  size: 4.06 kB
 ```
 
 Check the sources for updates.
@@ -74,6 +74,9 @@ http://localhost:6442
 ### `dps status`
   * see list of all tracked data
   * --trackers lists only trackers
+
+### `dps rm <name>`
+  * removes a tracked source from the list
 
 ### `dps destroy`
   * removes everything, including the data!

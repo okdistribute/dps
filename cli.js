@@ -21,6 +21,15 @@ function exec (cmd) {
     })
   }
 
+  if (cmd === 'rm' || cmd === 'remove') {
+    var location = args._[1]
+    if (!location|| args.help) return usage('dps rm <source>')
+    return dps.remove(location, function (err, data) {
+      if (err) abort(err)
+      done('Successfully deleted.')
+    })
+  }
+
   if (cmd === 'update') {
     if (args.help) return usage('dps update [location]')
     var cb = function (err, data) {
@@ -50,7 +59,7 @@ function exec (cmd) {
     else return dps.checkAll(cb)
   }
 
-  if (cmd === 'status') {
+  if (cmd === 'status' || cmd === 'st') {
     var output = ''
     for (var key in dps.config.sources) {
       if (dps.config.sources.hasOwnProperty(key)) {
