@@ -32,18 +32,14 @@ module.exports = function (dir) {
   }
 
   dps.updateAll = function (cb) {
-    var tasks = []
-    for (var key in dps.config.sources) {
-      if (dps.config.sources.hasOwnProperty(key)) {
-        tasks.push(function (done) {
-          updateOne(sourceList[key], done)
-        })
-      }
-    }
-    parallel(tasks, cb)
+    doParallel(updateOne, cb)
   }
 
-  dps.updateOne = function (source, cb) {
+  dps.updateOne = function (location, cb) {
+    updateOne(getSource(location), cb)
+  }
+
+  function updateOne (source, cb) {
     download(source, function (err, source) {
       if (err) return cb(err)
       updateSource(source)
@@ -51,19 +47,11 @@ module.exports = function (dir) {
     })
   }
 
-  dps.fetchAll = function (cb) {
-    var tasks = []
-    for (var key in dps.config.sources) {
-      if (dps.config.sources.hasOwnProperty(key)) {
-        tasks.push(function (done) {
-          fetch(dps.config.sources[key], done)
-        })
-      }
-    }
-    parallel(tasks, cb)
+  dps.checkAll = function (cb) {
+    doParallel(fetch, cb)
   }
 
-  dps.fetch = function (location, cb) {
+  dps.check = function (location, cb) {
     fetch(getSource(location), cb)
   }
 
@@ -79,6 +67,20 @@ module.exports = function (dir) {
     }
     rimraf.sync(configPath)
     cb()
+  }
+
+  function doParallel (func, cb) {
+    var tasks = []
+    for (var key in dps.config.sources) {
+      if (dps.config.sources.hasOwnProperty(key)) {
+        (function (key) {
+          tasks.push(function (done) {
+            func(getSource(key), done)
+          })
+        })(key)
+      }
+    }
+    parallel(tasks, cb)
   }
 
   function getSource (location) {

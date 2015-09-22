@@ -2,8 +2,9 @@ usage: dps <command(s)> [--flag] [--key=value]
 
 commands:
   add       download source
+  check     get metadata about a source
   update    update previously downloaded sources
-  remove    remove a source
+  rm        remove a source
   status    get status on current sources
   destroy   remove everything!
 
