@@ -21,6 +21,7 @@
   "homepage": "https://github.com/karissa/dps",
   "dependencies": {
     "console.table": "^0.4.0",
+    "dat-ping": "^1.0.3",
     "debug": "^2.2.0",
     "dom": "0.0.3",
     "got": "^4.1.1",
@@ -30,6 +31,7 @@
     "progress": "^1.1.8",
     "pump": "^1.0.0",
     "ractive": "^0.7.3",
+    "ractive-toolkit": "^1.0.1",
     "relative-date": "^1.1.2",
     "rimraf": "^2.4.3",
     "run-parallel": "^1.1.2",
