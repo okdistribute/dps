@@ -1,7 +1,10 @@
 usage: dps <command(s)> [--flag] [--key=value]
 
 commands:
-  add       download source 
-  update    update sources
+  add       download source
+  update    update previously downloaded sources
+  remove    remove a source
+  status    get status on current sources
+  destroy   remove everything!
 
 type `dps <command> --help` to view specific command help

@@ -1,6 +1,9 @@
 var path = require('path')
+var fs = require('fs')
+var rimraf = require('rimraf')
 var parallel = require('run-parallel')
-var download = require('../lib/util/download.js')
+var download = require('./lib/download.js')
+var fetch = require('./lib/fetch.js')
 
 CONFIG_FILE = 'dps.json'
 
@@ -28,54 +31,72 @@ module.exports = function (dir) {
     })
   }
 
-  dps.updateAll = function (args, cb) {
+  dps.updateAll = function (cb) {
     var tasks = []
     for (var key in dps.config.sources) {
-      tasks.push(function (done) {
-        updateOne(sourceList[key], args, done)
-      })
+      if (dps.config.sources.hasOwnProperty(key)) {
+        tasks.push(function (done) {
+          updateOne(sourceList[key], done)
+        })
+      }
     }
     parallel(tasks, cb)
   }
 
-  dps.updateOne = function (source, args, cb) {
+  dps.updateOne = function (source, cb) {
     download(source, function (err, source) {
       if (err) return cb(err)
-      updateSource(source, args)
+      updateSource(source)
       cb(null, source)
     })
   }
 
-  dps.save = function (cb) {
-    fs.writeFile(configPath, JSON.stringify(config, null, 2), cb)
+  dps.fetchAll = function (cb) {
+    var tasks = []
+    for (var key in dps.config.sources) {
+      if (dps.config.sources.hasOwnProperty(key)) {
+        tasks.push(function (done) {
+          fetch(dps.config.sources[key], done)
+        })
+      }
+    }
+    parallel(tasks, cb)
   }
 
-  dps.destroy = function () {
-    for (var source in config.sources) {
-      rimraf.sync(source.path)
+  dps.fetch = function (location, cb) {
+    fetch(getSource(location), cb)
+  }
+
+  dps.save = function (cb) {
+    fs.writeFile(configPath, JSON.stringify(dps.config, null, 2), cb)
+  }
+
+  dps.destroy = function (cb) {
+    for (var key in dps.config.sources) {
+      if (dps.config.sources.hasOwnProperty(key)) {
+        rimraf.sync(dps.config.sources[key].path)
+      }
     }
     rimraf.sync(configPath)
+    cb()
   }
 
   function getSource (location) {
-    return config.sources[location]
+    return dps.config.sources[location]
   }
 
   function updateSource (source) {
-    source.last_updated = new Date()
-    config.sources[source.location] = source
+    dps.config.sources[source.location] = source
   }
 
+  function readConfig (configPath) {
+    if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
+    else return { sources: {} }
+  }
+
+  function normalize (source) {
+    return source.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
+  }
 
   return dps
-}
-
-
-function readConfig (configPath) {
-  if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
-  else return { sources: {} }
-}
-
-module.exports = function normalize (source) {
-  return source.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
 }
