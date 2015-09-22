@@ -9,8 +9,8 @@ html, body {
 }
 
 body {
-  background-size: cover;
-  font: 14px/1.4 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  font: 14px/1.4; 
+  font-family: 'Noto Sans', sans-serif;
 }
 
 h2 {

@@ -4,15 +4,7 @@ var page = require('page')
 var fs = require('fs')
 var ipc = require('ipc')
 
-var dps = require('..')
-var configSync = require('../lib/util/config.js')
-
-function getSources () {
-  var args = {}
-  var config = configSync.read(args)
-  console.log(config.sources)
-  return config.sources
-}
+var dps = require('..')() // TODO: support projects
 
 function onerror (err) {
   var message = err.stack || err.message || JSON.stringify(err)
@@ -20,26 +12,35 @@ function onerror (err) {
   window.alert(message)
 }
 
+function done () {
+  // call with bind
+  var ractive = this
+  dps.save(function (err) {
+    if (err) return onerror(err)
+    ractive.set('sources', dps.config.sources)
+  })
+}
+
 var templates = {
   main: fs.readFileSync(path.join(__dirname, 'main.html')).toString()
 }
 
 var events = {
-  refresh: function (event, name) {
+  refresh: function (event, location) {
     var self = this
     var args = {}
-    dps.update(name, args, function (err, source) {
+    dps.updateOne(location, function (err, source) {
       if (err) return onerror(err)
-      self.set('sources', getSources())
+      done.bind(self)()
     })
   },
   add: function () {
     var self = this
     var location = this.get('location')
     var args = {}
-    dps.add(location, args, function (err, source) {
+    dps.add(location, function (err, source) {
       if (err) return onerror(err)
-      self.set('sources', getSources())
+      done.bind(self)()
     })
   },
   quit: function () {
@@ -50,7 +51,7 @@ var events = {
 var routes = {
   main: function (ctx, next) {
     ctx.template = templates.main
-    ctx.data = {sources: getSources()}
+    ctx.data = {sources: dps.config.sources}
     render(ctx)
   }
 }

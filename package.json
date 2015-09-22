@@ -4,7 +4,7 @@
   "description": "data per second (a data package system)",
   "main": "index.js",
   "scripts": {
-    "start": "electron menubar.js 2>&1 | silence-chromium"
+    "start": "electron app/app.js 2>&1 | silence-chromium"
   },
   "bin": {
     "dps": "./cli.js"
