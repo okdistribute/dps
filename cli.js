@@ -11,9 +11,8 @@ exec(args._[0])
 function exec (cmd) {
   if (cmd === 'add') {
     var location = args._[1]
+    if (!location || args.help) return usage('dps add <location> [name]')
     args.name = args.name || args.n || args._[2]
-    if (!location || args.help) return usage('dps add <location> <name>')
-
     var stream = dps.add(location, args, function (err, resource) {
       if (err) abort(err)
       done(resource)
@@ -27,22 +26,22 @@ function exec (cmd) {
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
-    location = args._[1]
-    if (!location || args.help) return usage('dps rm <resource>')
-    return dps.remove(location, function (err, data) {
+    var name = args._[1]
+    if (!name || args.help) return usage('dps rm <name>')
+    return dps.remove(name, function (err, data) {
       if (err) abort(err)
       done('Successfully deleted.')
     })
   }
 
   if (cmd === 'update') {
-    if (args.help) return usage('dps update [location]')
+    if (args.help) return usage('dps update [name]')
     var cb = function (err, data) {
       if (err) abort(err)
       done(data)
     }
-    location = args._[1]
-    if (location) return dps.updateOne(location, cb)
+    name = args._[1]
+    if (name) return dps.updateOne(name, cb)
     return dps.updateAll(cb)
   }
 
@@ -54,13 +53,13 @@ function exec (cmd) {
   }
 
   if (cmd === 'check') {
-    if (args.help) return usage('dps fetch [location]')
-    location = args._[1]
+    if (args.help) return usage('dps fetch [name]')
+    name = args._[1]
     cb = function (err, data) {
       if (err) abort(err)
       return exec('status')
     }
-    if (location) return dps.check(location, cb)
+    if (name) return dps.check(name, cb)
     else return dps.checkAll(cb)
   }
 
@@ -70,6 +69,7 @@ function exec (cmd) {
       if (dps.config.resources.hasOwnProperty(key)) {
         var resource = dps.config.resources[key]
         output += '\n'
+        output += resource.name + '\n'
         output += resource.location + '\n'
         output += '  checked: ' + relativeDate(new Date(resource.meta.checked))
         output += '  modified: ' + relativeDate(new Date(resource.meta.modified))

@@ -23,13 +23,16 @@ util.inherits(DPS, events.EventEmitter)
 
 DPS.prototype.add = function (location, args, cb) {
   var self = this
-  if (self.get(location)) return cb(new Error('Resource exists.'))
+  if (self.get({location: location})) return cb(new Error('Resource at url', location, 'already added.'))
+  if (self.get({name: name})) return cb(new Error('Resource exists with name', name))
+
+  var name = args.name || normalize(location) // should a name be required?
 
   var resource = {
-    path: args.name || normalize(location),
+    path: name, // can we be smarter about paths?
     location: location,
     type: args.type,
-    name: args.name
+    name: name
   }
 
   return download(resource, function (err) {
@@ -39,17 +42,18 @@ DPS.prototype.add = function (location, args, cb) {
   })
 }
 
-DPS.prototype.update = function (location, cb) {
+DPS.prototype.update = function (opts, cb) {
   var self = this
-  if (location) return self._updateOne(self.get(location), cb)
-  else return self._parallelize(self._updateOne, cb)
+  if (opts) return self._updateResource(self.get(opts), cb)
+  else return self._parallelize(self._updateResource, cb)
 }
 
-DPS.prototype._updateOne = function (resource, cb) {
+DPS.prototype._updateResource = function (resource, cb) {
   var self = this
-  download(resource, function (err, resource) {
+  download(resource, function (err, newResource) {
     if (err) return cb(err)
-    self._updateResource(resource)
+    var i = self._get_index(resource)
+    self.config.resources[i] = newResource
     cb(null, resource)
   })
 }
@@ -58,8 +62,8 @@ DPS.prototype.checkAll = function (cb) {
   this._parallelize(fetch, cb)
 }
 
-DPS.prototype.check = function (location, cb) {
-  fetch(this.get(location), cb)
+DPS.prototype.check = function (opts, cb) {
+  fetch(this.get(opts), cb)
 }
 
 DPS.prototype.save = function (cb) {
@@ -67,25 +71,31 @@ DPS.prototype.save = function (cb) {
   fs.writeFile(self.configPath, JSON.stringify(self.config, null, 2), cb)
 }
 
-DPS.prototype.remove = function (location, cb) {
+DPS.prototype.remove = function (name, cb) {
   var self = this
-  if (!location) return cb(new Error('Remove requires a location, got', location))
-  var resource = self.get(location)
-  if (!resource) return cb(new Error('Resource not found with name', location))
+  if (!name) return cb(new Error('Remove requires a name'))
+  var resource = self.get({name: name})
+  if (!resource) return cb(new Error('Resource not found with name', name))
   rimraf(resource.path, function (err) {
-    self._remove(location)
+    self._remove(name)
     cb(err)
   })
 }
 
-DPS.prototype.get = function (location) {
+DPS.prototype._get_index = function (query) {
   var self = this
   for (var i in self.config.resources) {
     var resource = self.config.resources[i]
-    if (resource.location === location) {
-      return resource
+    for (var key in query) {
+      if (resource[key] === query[key]) return i
     }
   }
+}
+
+DPS.prototype.get = function (opts) {
+  var self = this
+  var i = self._get_index(opts)
+  return self.config.resources[i]
 }
 
 DPS.prototype.destroy = function (cb) {
@@ -111,26 +121,18 @@ DPS.prototype._parallelize = function (func, cb) {
   parallel(tasks, cb)
 }
 
-DPS.prototype._remove = function (location) {
+DPS.prototype._remove = function (name) {
   var self = this
   var newResources = []
   for (var i in self.config.resources) {
     var resource = self.config.resources[i]
-    if (resource.location !== location) newResources.push(resource)
+    if (resource.name !== name) newResources.push(resource)
   }
   self.config.resources = newResources
 }
 
 DPS.prototype._add = function (resource) {
   this.config.resources.push(resource)
-}
-
-DPS.prototype._updateResource = function (newResource) {
-  var self = this
-  for (var i in self.config.resources) {
-    var resource = self.config.resources[i]
-    if (resource.location === newResource.location) self.config.resources[i] = newResource
-  }
 }
 
 function readConfig (configPath) {
