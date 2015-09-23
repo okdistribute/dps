@@ -30,7 +30,6 @@
     "pretty-bytes": "^2.0.1",
     "progress": "^1.1.8",
     "pump": "^1.0.0",
-    "ractive": "^0.7.3",
     "ractive-toolkit": "^1.0.1",
     "relative-date": "^1.1.2",
     "rimraf": "^2.4.3",
