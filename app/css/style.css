@@ -23,14 +23,23 @@ body {
   display: flex;
   width: 20%;
   max-width: 200px;
+  min-width: 150px;
   border-right: 1px solid black;
 }
 
 .sidebar__item {
   width: 100%;
-  padding: 15px;
+  padding: 15px 20px;
   font-size: 12px;
-  color: #ddd;
+  color:  #ABCCAD;
+  font-weight: bold;
+}
+
+.help-text {
+  font-weight: normal;
+  margin-top: 80px;
+  text-align: center;
+  color: #507550;
 }
 
 .sidebar__item.selected {
@@ -41,18 +50,14 @@ body {
 
 .sidebar__item:hover {
   background-color: #76A276;
-  color: #ABCCAD;
+  color: #C0E6C2;
 }
-
 
 #content {
   padding: 40px;
   width: 100%;
-}
-
-.muted {
-  color: #888;
-  font-size: 12px;
+  min-width: 500px;
+  max-width: 1000px;
 }
 
 a {
@@ -80,7 +85,7 @@ a {
 
 .list-item__header-info {
   font-size: 12px;
-  color: #ddd;
+  color: #C2ECC5;
 }
 
 .list-item__body {
@@ -96,6 +101,10 @@ a {
   margin-top: 15px;
 }
 
+.list-item__controls button:hover {
+  background-color: #8CBB8C;
+}
+
 .form-inline {
   display: inline-flex;
   width: 100%;
@@ -103,6 +112,10 @@ a {
 
 .form-inline .button {
   width: 20%;
+}
+
+.form-inline input[type="text"] {
+  margin-right: 20px;
 }
 
 ::-webkit-input-placeholder {
@@ -114,9 +127,10 @@ input[type="text"] {
   height: 35px;
   padding: 0px 0px 0px 10px;
   margin: 0px;
-  border: 1px solid #ddd;
+  border: 0px;
   background-color: #507550;
-  color: white;
+  color: #eee;
+  box-shadow: 0 0px 4px rgba(0,0,0,0.75);
   font-size: 16px;
 }
 
@@ -135,14 +149,20 @@ input[type="text"]:focus {
   cursor: pointer;
 }
 
+.button:focus, .button:active {
+  border: 0px;
+  outline: 0px;
+}
+
 .button {
-  color: #eee;
+  color: #C0E6C2;
   background-color: #76A276;
-  border: 1px solid #eee;
+  border: 0px;
   vertical-align: middle;
   font-size: 13px;
   padding: 0px 20px;
   height: 35px;
+  box-shadow: 0 1px 5px rgba(0,0,0,.15);
 }
 
 .bookend {
@@ -159,4 +179,33 @@ input[type="text"]:focus {
 .header {
   top: 0px;
   border-bottom: 1px solid #999;
+}
+
+.modal {
+  z-index: 9999999;
+  background-color: #618861;
+  padding: 40px;
+  position: absolute;
+  top: 25%;
+  transform: translateY(-25%);
+}
+
+.modal__controls {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: black;
+  z-index: 100000;
+  opacity: .75;
+}
+
+.hidden {
+  display: none;
 }

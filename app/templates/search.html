@@ -1,4 +1,20 @@
-<div class="add">
-  <input type="text" placeholder="search text" value="{{txt}}"/>
+<h2>Search</h2>
+
+<div class="add form-inline">
+  <input type="text" placeholder="enter a search query" value="{{searchText}}"/>
   <button class="button" on-click="search">search</button>
+</div>
+<h2>Available Portals</h2>
+<div class="add form-inline">
+  <input type="text" placeholder="Add a portal" value="{{portalText}}"/>
+  <button class="button" on-click="addPortal">add</button>
+</div>
+<div class="list">
+  {{#each trackers}}
+    <div class="list-item" on-click="open:{{this.location}}">
+    </div>
+    <div class="list-item__controls">
+      <button class="button" on-click="remove:{{this.location}}"><img src="./img/delete.png" />remove</button>
+    </div>
+  {{/each}}
 </div>

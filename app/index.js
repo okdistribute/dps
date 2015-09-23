@@ -14,32 +14,54 @@ function onerror (err) {
   window.alert(message)
 }
 
-function done () {
-  // call with bind
-  var ractive = this
+function done (ractive) {
   dps.save(function (err) {
     if (err) return onerror(err)
     ractive.set('sources', dps.config.sources)
   })
 }
 
+function ask (ractive, cb) {
+  ractive.fire('toggleModal')
+  var submit = dom('.modal button[type="submit"]')[0]
+  submit.onclick = function () {
+    cb()
+    ractive.fire('toggleModal')
+  }
+}
 
 var events = {
-  refresh: function (event, location) {
+  toggleModal: function () {
+    var modal = dom('.modal')
+    elementClass(modal[0]).toggle('hidden')
+    var mask = dom('.modal-mask')
+    elementClass(mask[0]).toggle('hidden')
+  },
+  remove: function (event, location) {
     var self = this
-    var args = {}
+    ask(self, function () {
+      dps.remove(location, function (err) {
+        if (err) return onerror(err)
+        done(self)
+      })
+    })
+  },
+  doUpdate: function (event, location) {
+    var self = this
     dps.updateOne(location, function (err, source) {
       if (err) return onerror(err)
-      done.bind(self)()
+      done(self)
     })
   },
   add: function () {
     var self = this
-    var location = this.get('location')
+    var location = self.get('location')
     var args = {}
-    dps.add(location, function (err, source) {
+    if (location.trim().length === 0) return
+    dps.add(location, args, function (err, source) {
       if (err) return onerror(err)
-      done.bind(self)()
+      self.set('location', '')
+      done(self)
     })
   },
   quit: function () {
