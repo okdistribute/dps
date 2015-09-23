@@ -4,10 +4,18 @@ Search, manage, and update datasets. **This is mostly vaporware right now.**
 
 With open data comes a price. It's difficult to track and manage all of the urls and APIs that provide data. Harvesting data for a simple query like 'city water' will become a nightmare, let alone if you have custom scraping processes to clean that data after it's downloaded! How do you know when the source data has changed? Enter DPS.
 
+```
+npm install
+```
+
 ## Example
 
 ```
-$ dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
+dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
+```
+
+This puts the following entry into `dps.json`:
+```
 {
   path: 'http_wwwopendatacachecomcookcountysocratacomapigeospatial26nmwd5q',
   location: 'http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q',
@@ -20,12 +28,15 @@ $ dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26n
 }
 ```
 
+Then I can add another one..
 
 ```
 $ dps add http://eukaryota.dathub.org/
-Cloning http://eukaryota.dathub.org into http_eukaryotadathuborg...
-Progress:  [+2, -0] and 1 file(s).
-Clone from remote to http_eukaryotadathuborg has completed.
+```
+
+And this is also added to the `dps.json`:
+
+```
 {
   path: 'http_eukaryotadathuborg',
   location: 'http://eukaryota.dathub.org',
@@ -41,7 +52,7 @@ Clone from remote to http_eukaryotadathuborg has completed.
 }
 ```
 
-See status:
+See status of all my downloads:
 ```
 $ dps status
 http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
