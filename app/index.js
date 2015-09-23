@@ -71,13 +71,19 @@ var events = {
 
 var templates = {
   search: fs.readFileSync(path.join(__dirname, 'templates', 'search.html')).toString(),
-  sources: fs.readFileSync(path.join(__dirname, 'templates', 'sources.html')).toString()
+  sources: fs.readFileSync(path.join(__dirname, 'templates', 'sources.html')).toString(),
+  portals: fs.readFileSync(path.join(__dirname, 'templates', 'portals.html')).toString()
 }
 
 var routes = {
   sources: function (ctx, next) {
     ctx.template = templates.sources
     ctx.data = {sources: dps.config.sources}
+    render(ctx)
+  },
+  portals: function (ctx, next) {
+    ctx.template = templates.portals
+    ctx.data = {sources: dps.config.sources, portals: dps.config.portals}
     render(ctx)
   },
   search: function (ctx, next) {
@@ -90,6 +96,7 @@ var routes = {
 // set up routes
 page('/', routes.sources)
 page('/search', routes.search)
+page('/portals', routes.portals)
 // initialize
 page.start()
 page('/')
