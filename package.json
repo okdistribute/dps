@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/karissa/dps",
   "dependencies": {
+    "cli-prompt": "^0.4.2",
     "console.table": "^0.4.0",
     "dat-ping": "^1.0.3",
     "debug": "^2.2.0",

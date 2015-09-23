@@ -15,20 +15,22 @@ function exec (cmd) {
   if (cmd === 'add') {
     var location = args._[1]
     if (!location || args.help) return usage('dps add <location>')
-    return dps.add(location, args, function (err, source) {
+
+    return dps.add(location, args, function (err, resource) {
       if (err) abort(err)
-      done(source)
+      done(resource)
     })
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
     var location = args._[1]
-    if (!location|| args.help) return usage('dps rm <source>')
+    if (!location|| args.help) return usage('dps rm <resource>')
     return dps.remove(location, function (err, data) {
       if (err) abort(err)
       done('Successfully deleted.')
     })
   }
+
 
   if (cmd === 'update') {
     if (args.help) return usage('dps update [location]')
@@ -61,14 +63,14 @@ function exec (cmd) {
 
   if (cmd === 'status' || cmd === 'st') {
     var output = ''
-    for (var key in dps.config.sources) {
-      if (dps.config.sources.hasOwnProperty(key)) {
-        var source = dps.config.sources[key]
+    for (var key in dps.config.resources) {
+      if (dps.config.resources.hasOwnProperty(key)) {
+        var resource = dps.config.resources[key]
         output += '\n'
-        output += source.location + '\n'
-        output += '  checked: ' + relativeDate(new Date(source.meta.checked))
-        output += '  modified: ' + relativeDate(new Date(source.meta.modified))
-        output += '  size: ' + prettyBytes(source.meta.size)
+        output += resource.location + '\n'
+        output += '  checked: ' + relativeDate(new Date(resource.meta.checked))
+        output += '  modified: ' + relativeDate(new Date(resource.meta.modified))
+        output += '  size: ' + prettyBytes(resource.size)
         output += '\n'
       }
     }

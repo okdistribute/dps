@@ -17,7 +17,7 @@ function onerror (err) {
 function done (ractive) {
   dps.save(function (err) {
     if (err) return onerror(err)
-    ractive.set('sources', dps.config.sources)
+    ractive.set('resources', dps.config.resources)
   })
 }
 
@@ -31,6 +31,9 @@ function ask (ractive, cb) {
 }
 
 var events = {
+  view: function (event, id) {
+    page.redirect('/view/' + id)
+  },
   toggleModal: function () {
     var modal = dom('.modal')
     elementClass(modal[0]).toggle('hidden')
@@ -48,7 +51,7 @@ var events = {
   },
   doUpdate: function (event, location) {
     var self = this
-    dps.updateOne(location, function (err, source) {
+    dps.updateOne(location, function (err, resource) {
       if (err) return onerror(err)
       done(self)
     })
@@ -58,7 +61,7 @@ var events = {
     var location = self.get('location')
     var args = {}
     if (location.trim().length === 0) return
-    dps.add(location, args, function (err, source) {
+    dps.add(location, args, function (err, resource) {
       if (err) return onerror(err)
       self.set('location', '')
       done(self)
@@ -71,32 +74,39 @@ var events = {
 
 var templates = {
   search: fs.readFileSync(path.join(__dirname, 'templates', 'search.html')).toString(),
-  sources: fs.readFileSync(path.join(__dirname, 'templates', 'sources.html')).toString(),
+  resources: fs.readFileSync(path.join(__dirname, 'templates', 'resources.html')).toString(),
+  view: fs.readFileSync(path.join(__dirname, 'templates', 'view.html')).toString(),
   portals: fs.readFileSync(path.join(__dirname, 'templates', 'portals.html')).toString()
 }
 
 var routes = {
-  sources: function (ctx, next) {
-    ctx.template = templates.sources
-    ctx.data = {sources: dps.config.sources}
+  view: function (ctx, next) {
+    ctx.template = templates.resources
+    ctx.data = {resource: dps.config.resources[ctx.params.id]}
+    render(ctx)
+  },
+  resources: function (ctx, next) {
+    ctx.template = templates.resources
+    ctx.data = {resources: dps.config.resources}
     render(ctx)
   },
   portals: function (ctx, next) {
     ctx.template = templates.portals
-    ctx.data = {sources: dps.config.sources, portals: dps.config.portals}
+    ctx.data = {resources: dps.config.resources, portals: dps.config.portals}
     render(ctx)
   },
   search: function (ctx, next) {
     ctx.template = templates.search
-    ctx.data = {sources: dps.config.sources}
+    ctx.data = {resources: dps.config.resources}
     render(ctx)
   }
 }
 
 // set up routes
-page('/', routes.sources)
+page('/', routes.resources)
 page('/search', routes.search)
 page('/portals', routes.portals)
+page('/view/:id', routes.view)
 // initialize
 page.start()
 page('/')

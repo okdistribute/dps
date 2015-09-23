@@ -1,33 +1,33 @@
 <h2>Data</h2>
 
 <div class="add form-inline">
-  <input type="text" placeholder="url to a data source" value="{{location}}"/>
+  <input type="text" placeholder="url to a data resource" value="{{location}}"/>
   <button class="button" on-click="add">download</button>
 </div>
 
 <div class="list">
-{{#each sources}}
-  <div class="list-item" on-click="open:{{this.location}}">
+{{#each resources}}
+  <div class="list-item" on-click="view:{{this.location}}">
     <div class="list-item__header">
-      <div>{{this.location}}</div>
-      <div class="list-item__header-info">{{prettyBytes(this.meta.size)}} {{relativeDate(this.meta.checked)}}</div>
+      <div class="clipped">{{this.name || this.location}}</div>
+      <div class="list-item__header-info">{{prettyBytes(this.size)}} {{relativeDate(this.meta.checked)}}</div>
     </div>
     <div class="list-item__body">
       <div class="list-item__info">
-        {{this.path}}
+        {{this.description}}
       </div>
       <div class="list-item__controls">
-        <button class="button" on-click="doUpdate:{{this.location}}"><img src="./img/refresh.png" />update</button>
-        <button class="button" on-click="remove:{{this.location}}"><img src="./img/delete.png" />remove</button>
+        <button class="button" on-click="doUpdate:{{this.location}}">update</button>
+        <button class="button" on-click="remove:{{this.location}}">remove</button>
       </div>
     </div>
   </div>
 {{/each}}
 </div>
-{{#if sources }}
+{{#if resources }}
 <button class="button" on-click="refresh">update all</button>
 {{else}}
-<h3 class="help-text">Start by adding a data source.</h3>
+<h3 class="help-text">Start by adding a data resource.</h3>
 {{/if}}
 
 <div class="modal hidden">

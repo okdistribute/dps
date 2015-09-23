@@ -16,18 +16,19 @@ module.exports = function (dir) {
   dps.config = readConfig(configPath)
 
   dps.add = function (location, args, cb) {
-    if (getSource(location)) return cb(new Error('Source exists.'))
+    if (dps.get(location)) return cb(new Error('Resource exists.'))
 
-    var source = {
+    var resource = {
       path: normalize(location),
       location: location,
-      type: args.type
+      type: args.type,
+      name: args.name
     }
 
-    download(source, function (err) {
+    download(resource, function (err) {
       if (err) return cb(err)
-      updateSource(source)
-      cb(null, source)
+      addResource(resource)
+      cb(null, resource)
     })
   }
 
@@ -36,14 +37,14 @@ module.exports = function (dir) {
   }
 
   dps.updateOne = function (location, cb) {
-    updateOne(getSource(location), cb)
+    updateOne(dps.get(location), cb)
   }
 
-  function updateOne (source, cb) {
-    download(source, function (err, source) {
+  function updateOne (resource, cb) {
+    download(resource, function (err, resource) {
       if (err) return cb(err)
-      updateSource(source)
-      cb(null, source)
+      updateResource(resource)
+      cb(null, resource)
     })
   }
 
@@ -52,7 +53,7 @@ module.exports = function (dir) {
   }
 
   dps.check = function (location, cb) {
-    fetch(getSource(location), cb)
+    fetch(dps.get(location), cb)
   }
 
   dps.save = function (cb) {
@@ -61,18 +62,25 @@ module.exports = function (dir) {
 
   dps.remove = function (key, cb) {
     if (!key) return (cb(new Error('Remove requires a key, got', key)))
-    rimraf(dps.config.sources[key].path, function (err) {
-      delete dps.config.sources[key]
+    rimraf(dps.get(key).path, function (err) {
+      delete dps.get(key)
       cb(err)
     })
   }
 
+  dps.get = function (location) {
+    for (var i in dps.config.resources) {
+      var resource = dps.config.resources[i]
+      if (resource.location === location) {
+        return resource
+      }
+    }
+  }
 
   dps.destroy = function (cb) {
-    for (var key in dps.config.sources) {
-      if (dps.config.sources.hasOwnProperty(key)) {
-        rimraf.sync(dps.config.sources[key].path)
-      }
+    for (var i in dps.config.resources) {
+      var resource = dps.config.resources[i]
+      rimraf.sync(dps.get(resource.location).path)
     }
     rimraf.sync(configPath)
     cb()
@@ -80,33 +88,36 @@ module.exports = function (dir) {
 
   function doParallel (func, cb) {
     var tasks = []
-    for (var key in dps.config.sources) {
-      if (dps.config.sources.hasOwnProperty(key)) {
-        (function (key) {
-          tasks.push(function (done) {
-            func(getSource(key), done)
-          })
-        })(key)
-      }
+    for (var i in dps.config.resources) {
+      (function (i) {
+        tasks.push(function (done) {
+          func(dps.config.resources[i], done)
+        })
+      })(i)
     }
     parallel(tasks, cb)
   }
 
-  function getSource (location) {
-    return dps.config.sources[location]
+  function addResource (resource) {
+    dps.config.resources.push(resource)
   }
 
-  function updateSource (source) {
-    dps.config.sources[source.location] = source
+  function updateResource (newResource) {
+    for (var i in dps.config.resources) {
+      var resource = dps.config.resources[i]
+      if (resource.location === newResource.location) dps.config.resources[i] = newResource
+    }
   }
 
   function readConfig (configPath) {
     if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
-    else return { sources: {} }
+    else return {
+      resources: []
+    }
   }
 
-  function normalize (source) {
-    return source.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
+  function normalize (resource) {
+    return resource.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
   }
 
   return dps

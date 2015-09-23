@@ -79,6 +79,13 @@ a {
   cursor: pointer;
 }
 
+.clipped {
+  text-overflow: ellipsis;
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden
+}
+
 .list-item__header {
   display: flex;
   justify-content: space-between;
