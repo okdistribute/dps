@@ -7,7 +7,7 @@ var parallel = require('run-parallel')
 var download = require('./lib/download.js')
 var fetch = require('./lib/fetch.js')
 
-CONFIG_FILE = 'dps.json'
+var CONFIG_FILE = 'dps.json'
 
 module.exports = DPS
 
@@ -26,7 +26,7 @@ DPS.prototype.add = function (location, args, cb) {
   if (self.get(location)) return cb(new Error('Resource exists.'))
 
   var resource = {
-    path: normalize(location),
+    path: args.name || normalize(location),
     location: location,
     type: args.type,
     name: args.name
@@ -42,7 +42,7 @@ DPS.prototype.add = function (location, args, cb) {
 DPS.prototype.update = function (location, cb) {
   var self = this
   if (location) return self._updateOne(self.get(location), cb)
-  else return self._parallelize(updateOne, cb)
+  else return self._parallelize(self._updateOne, cb)
 }
 
 DPS.prototype._updateOne = function (resource, cb) {
@@ -55,7 +55,7 @@ DPS.prototype._updateOne = function (resource, cb) {
 }
 
 DPS.prototype.checkAll = function (cb) {
-  doParallel(fetch, cb)
+  this._parallelize(fetch, cb)
 }
 
 DPS.prototype.check = function (location, cb) {
@@ -98,7 +98,7 @@ DPS.prototype.destroy = function (cb) {
   cb()
 }
 
-DPS.prototype._doParallel = function (func, cb) {
+DPS.prototype._parallelize = function (func, cb) {
   var self = this
   var tasks = []
   for (var i in self.config.resources) {
@@ -135,11 +135,11 @@ DPS.prototype._updateResource = function (newResource) {
 
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
-  else return {
+  return {
     resources: []
   }
 }
 
-function normalize (resource) {
-  return resource.replace('\/','_').replace(/[^a-z_+A-Z0-9]/ig, '')
+function normalize (location) {
+  return location.replace('\/', '_').replace(/[^a-z_+A-Z0-9]/ig, '')
 }

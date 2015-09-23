@@ -6,12 +6,13 @@ var relativeDate = require('relative-date')
 var prettyBytes = require('pretty-bytes')
 
 var dps = require('./')(args.path)
-return exec(args._[0])
+exec(args._[0])
 
 function exec (cmd) {
   if (cmd === 'add') {
     var location = args._[1]
-    if (!location || args.help) return usage('dps add <location>')
+    args.name = args.name || args.n || args._[2]
+    if (!location || args.help) return usage('dps add <location> <name>')
 
     var stream = dps.add(location, args, function (err, resource) {
       if (err) abort(err)
@@ -26,14 +27,13 @@ function exec (cmd) {
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
-    var location = args._[1]
-    if (!location|| args.help) return usage('dps rm <resource>')
+    location = args._[1]
+    if (!location || args.help) return usage('dps rm <resource>')
     return dps.remove(location, function (err, data) {
       if (err) abort(err)
       done('Successfully deleted.')
     })
   }
-
 
   if (cmd === 'update') {
     if (args.help) return usage('dps update [location]')
@@ -41,7 +41,7 @@ function exec (cmd) {
       if (err) abort(err)
       done(data)
     }
-    var location = args._[1]
+    location = args._[1]
     if (location) return dps.updateOne(location, cb)
     return dps.updateAll(cb)
   }
@@ -55,8 +55,8 @@ function exec (cmd) {
 
   if (cmd === 'check') {
     if (args.help) return usage('dps fetch [location]')
-    var location = args._[1]
-    var cb = function (err, data) {
+    location = args._[1]
+    cb = function (err, data) {
       if (err) abort(err)
       return exec('status')
     }
