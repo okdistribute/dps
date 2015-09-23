@@ -16,10 +16,15 @@ function exec (cmd) {
     var location = args._[1]
     if (!location || args.help) return usage('dps add <location>')
 
-    return dps.add(location, args, function (err, resource) {
+    var stream = dps.add(location, args, function (err, resource) {
       if (err) abort(err)
       done(resource)
     })
+    if (stream && stream.stdout) {
+      stream.stdout.pipe(process.stdout)
+      stream.stderr.pipe(process.stderr)
+    }
+    return stream
   }
 
   if (cmd === 'rm' || cmd === 'remove') {

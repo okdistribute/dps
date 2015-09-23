@@ -25,7 +25,7 @@ module.exports = function (dir) {
       name: args.name
     }
 
-    download(resource, function (err) {
+    return download(resource, function (err) {
       if (err) return cb(err)
       addResource(resource)
       cb(null, resource)
@@ -60,10 +60,10 @@ module.exports = function (dir) {
     fs.writeFile(configPath, JSON.stringify(dps.config, null, 2), cb)
   }
 
-  dps.remove = function (key, cb) {
-    if (!key) return (cb(new Error('Remove requires a key, got', key)))
-    rimraf(dps.get(key).path, function (err) {
-      delete dps.get(key)
+  dps.remove = function (location, cb) {
+    if (!location) return (cb(new Error('Remove requires a location, got', location)))
+    rimraf(dps.get(location).path, function (err) {
+      removeResource(location)
       cb(err)
     })
   }
@@ -80,7 +80,7 @@ module.exports = function (dir) {
   dps.destroy = function (cb) {
     for (var i in dps.config.resources) {
       var resource = dps.config.resources[i]
-      rimraf.sync(dps.get(resource.location).path)
+      rimraf.sync(resource.path)
     }
     rimraf.sync(configPath)
     cb()
@@ -96,6 +96,15 @@ module.exports = function (dir) {
       })(i)
     }
     parallel(tasks, cb)
+  }
+
+  function removeResource (location) {
+    var newResources = []
+    for (var i in dps.config.resources) {
+      var resource = dps.config.resources[i]
+      if (resource.location !== location) newResources.push(resource)
+    }
+    dps.config.resources = newResources
   }
 
   function addResource (resource) {

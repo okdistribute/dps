@@ -32,7 +32,8 @@ function ask (ractive, cb) {
 
 var events = {
   view: function (event, id) {
-    page.redirect('/view/' + id)
+    console.log(id)
+    page('/view/' + id)
   },
   toggleModal: function () {
     var modal = dom('.modal')
@@ -81,7 +82,7 @@ var templates = {
 
 var routes = {
   view: function (ctx, next) {
-    ctx.template = templates.resources
+    ctx.template = templates.view
     ctx.data = {resource: dps.config.resources[ctx.params.id]}
     render(ctx)
   },
