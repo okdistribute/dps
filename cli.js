@@ -5,11 +5,9 @@ var path = require('path')
 var relativeDate = require('relative-date')
 var prettyBytes = require('pretty-bytes')
 
-var dps = require('./')(args.path)
-
-var cmd = args._[0]
-
-return exec(cmd)
+var DPS = require('./')
+var dps = DPS(args.path)
+return exec(args._[0])
 
 function exec (cmd) {
   if (cmd === 'add') {
@@ -21,6 +19,7 @@ function exec (cmd) {
       done(resource)
     })
     if (stream && stream.stdout) {
+      console.log('got stream')
       stream.stdout.pipe(process.stdout)
       stream.stderr.pipe(process.stderr)
     }
