@@ -14,7 +14,8 @@ module.exports = DPS
 function DPS (dir) {
   if (!(this instanceof DPS)) return new DPS(dir)
   if (!dir) dir = process.cwd()
-  this.configPath = path.join(dir, CONFIG_FILE)
+  this.dir = dir
+  this.configPath = path.join(this.dir, CONFIG_FILE)
   this.config = readConfig(this.configPath)
   events.EventEmitter.call(this)
 }
@@ -29,7 +30,7 @@ DPS.prototype.add = function (location, args, cb) {
   var name = args.name || normalize(location) // should a name be required?
 
   var resource = {
-    path: name, // can we be smarter about paths?
+    path: path.join(self.dir, name), // can we be smarter about paths?
     location: location,
     type: args.type,
     name: name
@@ -100,12 +101,11 @@ DPS.prototype.get = function (opts) {
 
 DPS.prototype.destroy = function (cb) {
   var self = this
-  for (var i in self.config.resources) {
-    var resource = self.config.resources[i]
-    rimraf.sync(resource.path)
-  }
-  rimraf.sync(self.configPath)
-  cb()
+  self._parallelize(function (resource, done) {
+    rimraf(resource.path, done)
+  }, function () {
+    rimraf(self.configPath, cb)
+  })
 }
 
 DPS.prototype._parallelize = function (func, cb) {
