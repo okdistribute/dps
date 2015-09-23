@@ -12,9 +12,9 @@ $ dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26n
   path: 'http_wwwopendatacachecomcookcountysocratacomapigeospatial26nmwd5q',
   location: 'http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q',
   type: 'url',
+  size: 618400,
   meta: {
     modified: Wed Jun 24 2015 14:52:26 GMT-0700 (PDT),
-    size: 618400,
     checked: Tue Sep 22 2015 01:51:43 GMT-0700 (PDT)
   }
 }
@@ -30,10 +30,13 @@ Clone from remote to http_eukaryotadathuborg has completed.
   path: 'http_eukaryotadathuborg',
   location: 'http://eukaryota.dathub.org',
   type: 'dat',
+  size: 4059
+  name: 'eukaryota',
+  description: 'some description',
+  publisher: 'maxogden',
   meta: {
     modified: Mon Sep 21 2015 21:07:41 GMT-0700 (PDT),
     checked: Tue Sep 22 2015 01:52:57 GMT-0700 (PDT),
-    size: 4059
   }
 }
 ```

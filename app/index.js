@@ -32,7 +32,6 @@ function ask (ractive, cb) {
 
 var events = {
   view: function (event, id) {
-    console.log(id)
     page('/view/' + id)
   },
   toggleModal: function () {
@@ -47,15 +46,20 @@ var events = {
       dps.remove(location, function (err) {
         if (err) return onerror(err)
         done(self)
+        self.message('success', location + ' deleted successfully!')
       })
     })
+    return false
   },
   doUpdate: function (event, location) {
     var self = this
-    dps.updateOne(location, function (err, resource) {
+    dps.update(location, function (err, data) {
       if (err) return onerror(err)
       done(self)
+      var txt = data.length ? data.length + ' resources ' : data.location
+      self.message('success', txt + ' updated successfully!')
     })
+    return false
   },
   add: function () {
     var self = this
@@ -65,8 +69,10 @@ var events = {
     dps.add(location, args, function (err, resource) {
       if (err) return onerror(err)
       self.set('location', '')
+      self.message('success', resource.location + ' added successfully!')
       done(self)
     })
+    return false
   },
   quit: function () {
     ipc.send('terminate')
@@ -117,7 +123,18 @@ function render (ctx) {
     el: '#content',
     template: ctx.template,
     data: ctx.data,
-    onrender: ctx.onrender
+    onrender: ctx.onrender,
+    message: function (type, text) {
+      var ele = document.getElementsByClassName('banner')[0]
+      ele.innerHTML = text
+      var cl = elementClass(ele)
+      cl.remove('success')
+      cl.remove('error')
+      cl.add(type)
+      setTimeout(function () {
+        cl.remove(type)
+      }, 2000)
+    }
   })
 
   dom('.sidebar__item').each(function (el) {

@@ -5,8 +5,7 @@ var path = require('path')
 var relativeDate = require('relative-date')
 var prettyBytes = require('pretty-bytes')
 
-var DPS = require('./')
-var dps = DPS(args.path)
+var dps = require('./')(args.path)
 return exec(args._[0])
 
 function exec (cmd) {
