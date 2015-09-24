@@ -5,10 +5,10 @@
 </div>
 <div class="list">
   {{#each portals}}
-    <div class="list-item" on-click="open:{{this.location}}">
+    <div class="list-item" on-click="open:{{this.name}}">
     </div>
     <div class="list-item__controls">
-      <button class="button" on-click="remove:{{this.location}}"><img src="./img/delete.png" />remove</button>
+      <button class="button" on-click="remove:{{this.name}}"><img src="./img/delete.png" />remove</button>
     </div>
   {{/each}}
 </div>

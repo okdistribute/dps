@@ -42,9 +42,9 @@ DPS.prototype.add = function (location, args, cb) {
   })
 }
 
-DPS.prototype.update = function (opts, cb) {
+DPS.prototype.update = function (name, cb) {
   var self = this
-  if (opts) return self._updateResource(self.get(opts), cb)
+  if (name) return self._updateResource(self.get({name: name}), cb)
   else return self._parallelize(self._updateResource, cb)
 }
 

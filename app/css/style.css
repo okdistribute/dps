@@ -80,7 +80,6 @@ a {
 
 .clipped {
   text-overflow: ellipsis;
-  width: 50%;
   white-space: nowrap;
   overflow: hidden
 }
@@ -104,8 +103,13 @@ a {
   justify-content: space-between;
 }
 
+.list-item__info {
+  max-width: 60%;
+}
+
 .list-item__controls {
   margin-top: 15px;
+  min-width: 175px;
 }
 
 .list-item__controls button:hover {

@@ -40,23 +40,23 @@ var events = {
     var mask = dom('.modal-mask')
     elementClass(mask[0]).toggle('hidden')
   },
-  remove: function (event, location) {
+  remove: function (event, name) {
     var self = this
     ask(self, function () {
-      dps.remove(location, function (err) {
+      dps.remove(name, function (err) {
         if (err) return onerror(err)
         done(self)
-        self.message('success', location + ' deleted successfully!')
+        self.message('success', name + ' deleted successfully!')
       })
     })
     return false
   },
-  doUpdate: function (event, location) {
+  doUpdate: function (event, name) {
     var self = this
-    dps.update(location, function (err, data) {
+    dps.update(name, function (err, data) {
       if (err) return onerror(err)
       done(self)
-      var txt = data.length ? data.length + ' resources ' : data.location
+      var txt = data.length ? data.length + ' resources ' : data.name
       self.message('success', txt + ' updated successfully!')
     })
     return false
@@ -69,7 +69,7 @@ var events = {
     dps.add(location, args, function (err, resource) {
       if (err) return onerror(err)
       self.set('location', '')
-      self.message('success', resource.location + ' added successfully!')
+      self.message('success', resource.name + ' added successfully!')
       done(self)
     })
     return false

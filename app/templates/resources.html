@@ -9,16 +9,16 @@
 {{#each resources:i}}
   <div class="list-item" on-click="view:{{i}}">
     <div class="list-item__header">
-      <div class="clipped">{{this.name || this.location}}</div>
+      <div class="clipped">{{this.name}}</div>
       <div class="list-item__header-info">{{prettyBytes(this.size)}} {{relativeDate(this.meta.checked)}}</div>
     </div>
     <div class="list-item__body">
-      <div class="list-item__info">
+      <div class="list-item__info clipped">
         {{this.description}}
       </div>
       <div class="list-item__controls">
-        <button class="button" on-click="doUpdate:{{this.location}}">update</button>
-        <button class="button" on-click="remove:{{this.location}}">remove</button>
+        <button class="button" on-click="doUpdate:{{this.name}}">update</button>
+        <button class="button" on-click="remove:{{this.name}}">remove</button>
       </div>
     </div>
   </div>
