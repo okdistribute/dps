@@ -14,15 +14,15 @@ npm install
 ## Example
 
 ```
-dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q
+dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q cookcounty.geo
 ```
 
 This puts the following entry into `dps.json`:
 ```
 {
-  path: 'http_wwwopendatacachecomcookcountysocratacomapigeospatial26nmwd5q',
   location: 'http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q',
   type: 'url',
+  name: 'cookcounty.geo',
   size: 618400,
   meta: {
     modified: Wed Jun 24 2015 14:52:26 GMT-0700 (PDT),
@@ -41,7 +41,6 @@ And this is also added to the `dps.json`:
 
 ```
 {
-  path: 'http_eukaryotadathuborg',
   location: 'http://eukaryota.dathub.org',
   type: 'dat',
   size: 4059
@@ -77,7 +76,7 @@ http://localhost:6442
 
 ## CLI api
 
-### `dps add <url>`
+### `dps add <url> <name>`
   * name will be found through any 'tracked' registries.
   * url could be the url of anything that gives data with HTTP GET (not in a tracked registry)
   * auto-detects dat endpoints and tracks version changes

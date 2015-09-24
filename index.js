@@ -30,13 +30,12 @@ DPS.prototype.add = function (location, args, cb) {
   var name = args.name || normalize(location) // should a name be required?
 
   var resource = {
-    path: path.join(self.dir, name), // can we be smarter about paths?
     location: location,
     type: args.type,
     name: name
   }
 
-  return download(resource, function (err) {
+  return download(self.dir, resource, function (err) {
     if (err) return cb(err)
     self._add(resource)
     cb(null, resource)
@@ -51,7 +50,7 @@ DPS.prototype.update = function (opts, cb) {
 
 DPS.prototype._updateResource = function (resource, cb) {
   var self = this
-  download(resource, function (err, newResource) {
+  download(self.dir, resource, function (err, newResource) {
     if (err) return cb(err)
     var i = self._get_index(resource)
     self.config.resources[i] = newResource
@@ -77,7 +76,7 @@ DPS.prototype.remove = function (name, cb) {
   if (!name) return cb(new Error('Remove requires a name'))
   var resource = self.get({name: name})
   if (!resource) return cb(new Error('Resource not found with name', name))
-  rimraf(resource.path, function (err) {
+  rimraf(resource.name, function (err) {
     self._remove(name)
     cb(err)
   })
@@ -93,6 +92,11 @@ DPS.prototype._get_index = function (query) {
   }
 }
 
+DPS.prototype._resourcePath = function (resource) {
+  // TODO: can we get deduplicate downloads on a single machine?
+  return path.join(this.dir, resource.name)
+}
+
 DPS.prototype.get = function (opts) {
   var self = this
   var i = self._get_index(opts)
@@ -102,7 +106,7 @@ DPS.prototype.get = function (opts) {
 DPS.prototype.destroy = function (cb) {
   var self = this
   self._parallelize(function (resource, done) {
-    rimraf(resource.path, done)
+    rimraf(self._resourcePath(resource), done)
   }, function () {
     rimraf(self.configPath, cb)
   })
