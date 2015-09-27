@@ -76,7 +76,7 @@ var events = {
   },
   openUrl: function (event, url) {
     shell.openExternal(url)
-    event.original.reventDefault()
+    event.original.preventDefault()
   },
   quit: function () {
     ipc.send('terminate')

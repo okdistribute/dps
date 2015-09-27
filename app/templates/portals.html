@@ -1,7 +1,10 @@
 <h2>Portals</h2>
-<div class="add form-inline">
-  <input type="text" placeholder="Add a portal" value="{{portalText}}"/>
-  <button class="button" on-click="addPortal">add</button>
+<div class="form">
+  <input type="text" placeholder="http://mydatahub.somewhere.org.." value="{{url}}"/>
+  <div class="add form-inline">
+    <input type="text" placeholder="socrata, ckan..." value="{{type}}"/>
+    <button class="button" on-click="addPortal">add</button>
+  </div>
 </div>
 <div class="list">
   {{#each portals}}

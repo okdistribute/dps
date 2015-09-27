@@ -8,6 +8,7 @@ var download = require('./lib/download.js')
 var fetch = require('./lib/fetch.js')
 
 var CONFIG_FILE = 'dps.json'
+var PORTALS_PATH = path.join(__dirname, 'addons')
 
 module.exports = DPS
 
@@ -153,9 +154,19 @@ DPS.prototype._add = function (resource) {
 
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
+  var portals = []
+  // get built-in or "core" portals
+  var addonFiles = fs.readdirSync(PORTALS_PATH)
+  for (var i in addonFiles) {
+    var addon = addonFiles[i]
+    fs.readFile(path.join(PORTALS_PATH, addon), function (err, data) {
+      if (err) throw new Error(err)
+      portals.push(JSON.parse(data))
+    })
+  }
   return {
     resources: [],
-    portals: []
+    portals: portals
   }
 }
 

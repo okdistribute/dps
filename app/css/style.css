@@ -139,10 +139,10 @@ p a {
 }
 
 input[type="text"] {
-  width: 80%;
+  margin-bottom: 15px;
+  width: 100%;
   height: 35px;
   padding: 0px 0px 0px 10px;
-  margin: 0px;
   border: 0px;
   background-color: #507550;
   color: #eee;
