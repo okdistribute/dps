@@ -16,10 +16,11 @@ function onerror (err) {
   window.alert(message)
 }
 
-function done (ractive) {
+function done (ractive, message) {
   dps.save(function (err) {
     if (err) return onerror(err)
     ractive.set('resources', dps.config.resources)
+    ractive.message('success', message)
   })
 }
 
@@ -47,8 +48,7 @@ var events = {
     ask(self, function () {
       dps.remove(name, function (err) {
         if (err) return onerror(err)
-        done(self)
-        self.message('success', name + ' deleted successfully!')
+        done(self, name + ' deleted successfully!')
       })
     })
     return false
@@ -57,9 +57,8 @@ var events = {
     var self = this
     dps.update(name, function (err, data) {
       if (err) return onerror(err)
-      done(self)
       var txt = data.length ? data.length + ' resources ' : data.name
-      self.message('success', txt + ' updated successfully!')
+      done(self, txt + ' updated successfully!')
     })
     return false
   },
@@ -71,8 +70,7 @@ var events = {
     dps.add(location, args, function (err, resource) {
       if (err) return onerror(err)
       self.set('location', '')
-      self.message('success', resource.name + ' added successfully!')
-      done(self)
+      done(self, resource.name + ' added successfully!')
     })
     return false
   },
