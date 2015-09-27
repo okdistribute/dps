@@ -22,15 +22,12 @@
   "homepage": "https://github.com/karissa/dps",
   "dependencies": {
     "cli-prompt": "^0.4.2",
-    "console.table": "^0.4.0",
     "dat-ping": "^1.0.3",
     "debug": "^2.2.0",
     "dom": "0.0.3",
     "extend": "^3.0.0",
     "format-data": "^2.1.2",
     "got": "^4.1.1",
-    "inline-svg": "^2.2.0",
-    "menubar": "^2.2.1",
     "minimist": "^1.2.0",
     "npm-execspawn": "^1.2.1",
     "page": "^1.6.3",
@@ -42,8 +39,7 @@
     "rimraf": "^2.4.3",
     "run-parallel": "^1.1.2",
     "silence-chromium": "^2.0.0",
-    "standard": "^5.3.1",
-    "subcommand": "^2.0.2"
+    "standard": "^5.3.1"
   },
   "devDependencies": {
     "electron-prebuilt": "^0.33.0",
