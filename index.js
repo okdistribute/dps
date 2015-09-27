@@ -77,8 +77,9 @@ DPS.prototype.remove = function (name, cb) {
   var resource = self.get({name: name})
   if (!resource) return cb(new Error('Resource not found with name', name))
   rimraf(resource.name, function (err) {
+    if (err) return cb(err)
     self._remove(name)
-    cb(err)
+    cb()
   })
 }
 
@@ -142,7 +143,8 @@ DPS.prototype._add = function (resource) {
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
   return {
-    resources: []
+    resources: [],
+    portals: []
   }
 }
 

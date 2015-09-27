@@ -119,6 +119,7 @@ page.start()
 page('/')
 
 function render (ctx) {
+  ctx.data.IMG = path.join(__dirname, 'img')
   var ract = new Ractive({
     el: '#content',
     template: ctx.template,
