@@ -58,6 +58,17 @@ DPS.prototype._updateResource = function (resource, cb) {
   })
 }
 
+DPS.prototype.addPortal = function (url, args, cb) {
+  var self = this
+  var portal = {
+    type: args.type,
+    url: url,
+    opts: args
+  }
+  self.config.portals.push(portal)
+  return portal
+}
+
 DPS.prototype.checkAll = function (cb) {
   this._parallelize(fetch, cb)
 }

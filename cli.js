@@ -81,6 +81,14 @@ function exec (cmd) {
     return console.log(output)
   }
 
+  if (cmd === 'track') {
+    var url = args._[1]
+    return dps.addPortal(url, args, function (err, portal) {
+      if (err) abort(err)
+      done(portal)
+    })
+  }
+
   usage(fs.readFileSync(path.join(__dirname, '/usage/root.txt')).toString())
 }
 
