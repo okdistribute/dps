@@ -2,11 +2,14 @@ var path = require('path')
 var elementClass = require('element-class')
 var Ractive = require('ractive-toolkit')
 var page = require('page')
+var shell = require('shell')
+var svg = require('inline-svg')
 var dom = require('dom')
 var fs = require('fs')
 var ipc = require('ipc')
 
 var dps = require('..')() // TODO: support projects
+var IMG_PATH = path.join(__dirname, 'img')
 
 function onerror (err) {
   var message = err.stack || err.message || JSON.stringify(err)
@@ -74,6 +77,10 @@ var events = {
     })
     return false
   },
+  openUrl: function (event, url) {
+    shell.openExternal(url)
+    event.original.reventDefault()
+  },
   quit: function () {
     ipc.send('terminate')
   }
@@ -81,12 +88,17 @@ var events = {
 
 var templates = {
   search: fs.readFileSync(path.join(__dirname, 'templates', 'search.html')).toString(),
+  about: fs.readFileSync(path.join(__dirname, 'templates', 'about.html')).toString(),
   resources: fs.readFileSync(path.join(__dirname, 'templates', 'resources.html')).toString(),
   view: fs.readFileSync(path.join(__dirname, 'templates', 'view.html')).toString(),
   portals: fs.readFileSync(path.join(__dirname, 'templates', 'portals.html')).toString()
 }
 
 var routes = {
+  about: function (ctx, next) {
+    ctx.template = templates.about
+    render(ctx)
+  },
   view: function (ctx, next) {
     ctx.template = templates.view
     ctx.data = {resource: dps.config.resources[ctx.params.id]}
@@ -112,6 +124,7 @@ var routes = {
 // set up routes
 page('/', routes.resources)
 page('/search', routes.search)
+page('/about', routes.about)
 page('/portals', routes.portals)
 page('/view/:id', routes.view)
 // initialize
@@ -119,7 +132,13 @@ page.start()
 page('/')
 
 function render (ctx) {
-  ctx.data.IMG = path.join(__dirname, 'img')
+  if (!ctx.template) throw new Error('Template required.')
+  ctx.data = ctx.data || {}
+  ctx.data.IMG_PATH = IMG_PATH
+  ctx.data.images = {
+    refresh: fs.readFileSync(path.join(IMG_PATH, 'refresh.svg')).toString(),
+    trash: fs.readFileSync(path.join(IMG_PATH, 'trash.svg')).toString()
+  }
   var ract = new Ractive({
     el: '#content',
     template: ctx.template,
@@ -129,8 +148,6 @@ function render (ctx) {
       var ele = document.getElementsByClassName('banner')[0]
       ele.innerHTML = text
       var cl = elementClass(ele)
-      cl.remove('success')
-      cl.remove('error')
       cl.add(type)
       setTimeout(function () {
         cl.remove(type)

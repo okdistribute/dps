@@ -29,6 +29,7 @@
     "extend": "^3.0.0",
     "format-data": "^2.1.2",
     "got": "^4.1.1",
+    "inline-svg": "^2.2.0",
     "menubar": "^2.2.1",
     "minimist": "^1.2.0",
     "npm-execspawn": "^1.2.1",

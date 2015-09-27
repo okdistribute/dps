@@ -64,6 +64,11 @@ a {
   text-decoration: none;
   color: inherit;
 }
+p a {
+  text-decoration: underline;
+  color: #ABCCAD;
+  font-weight: bold;
+}
 
 .list-item {
   background-color: #76A276;
@@ -150,9 +155,14 @@ input[type="text"]:focus {
   outline-offset: -2px;
 }
 
-.button img {
+.button img, .button svg {
   vertical-align: middle;
   margin-right: 5px;
+  width: 20px;
+}
+
+svg {
+  fill: #507550;
 }
 
 .button:hover {
@@ -171,7 +181,7 @@ input[type="text"]:focus {
   border: 0px;
   vertical-align: middle;
   font-size: 13px;
-  padding: 0px 20px;
+  padding: 0px 10px;
   height: 35px;
   box-shadow: 0 1px 5px rgba(0,0,0,.15);
 }
