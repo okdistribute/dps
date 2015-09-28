@@ -68,8 +68,7 @@ function exec (cmd) {
   if (cmd === 'search') {
     var query = args._[1]
     if (args.help || !query) return usage('dps search <query>')
-    var stream = dps.search(query)
-    return stream.pipe(through.obj(function (results, enc, next) {
+    return dps.search(query).pipe(through.obj(function (results, enc, next) {
       output = ''
       var searcher = results.searcher
       for (var i in results.data.items) {

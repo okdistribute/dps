@@ -181,7 +181,6 @@ DPS.prototype._add = function (resource) {
 
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
-  var portals = []
   return {
     resources: [],
     portals: []
