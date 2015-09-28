@@ -1,17 +1,21 @@
-<h2>Portals</h2>
 <div class="form">
-  <input type="text" placeholder="http://mydatahub.somewhere.org.." value="{{url}}"/>
+  <input type="text" placeholder="add new portal URL" value="{{url}}"/>
   <div class="add form-inline">
     <input type="text" placeholder="socrata, ckan..." value="{{type}}"/>
     <button class="button" on-click="addPortal">add</button>
   </div>
 </div>
 <div class="list">
-  {{#each portals}}
-    <div class="list-item" on-click="open:{{this.name}}">
+  <h2>Searchable Portals</h2>
+  {{#each core_portals}}
+  <div class="list-item" on-click="openUrl:{{this.url}}">
+    <div class="list-item__header">
+      <div class="clipped list-item__header-text"><img src="{{this.icon}}" /> figshare </div>
+      <div class="list-item__header-info">{{this.url}}</div>
     </div>
-    <div class="list-item__controls">
-      <button class="button" on-click="remove:{{this.name}}"><img src="./img/delete.png" />remove</button>
+    <div class="list-item__body">
+        {{this.description}}
     </div>
+  </div>
   {{/each}}
 </div>

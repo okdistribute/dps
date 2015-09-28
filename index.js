@@ -4,6 +4,7 @@ var fs = require('fs')
 var util = require('util')
 var rimraf = require('rimraf')
 var parallel = require('run-parallel')
+var fedsearch = require('federated-search')
 var download = require('./lib/download.js')
 var fetch = require('./lib/fetch.js')
 
@@ -18,7 +19,22 @@ function DPS (dir) {
   this.dir = dir
   this.configPath = path.join(this.dir, CONFIG_FILE)
   this.config = readConfig(this.configPath)
+  this.core_portals = getCorePortals()
+
   events.EventEmitter.call(this)
+}
+
+function getCorePortals () {
+  // get built-in or "core" portals
+  // TODO: this is just for demo, prob needs a refactor
+  var portals = []
+  var addonFiles = fs.readdirSync(PORTALS_PATH)
+  for (var i in addonFiles) {
+    var addon = addonFiles[i]
+    var data = fs.readFileSync(path.join(PORTALS_PATH, addon))
+    portals.push(JSON.parse(data))
+  }
+  return portals
 }
 
 util.inherits(DPS, events.EventEmitter)
@@ -41,6 +57,17 @@ DPS.prototype.add = function (location, args, cb) {
     self._add(resource)
     cb(null, resource)
   })
+}
+
+DPS.prototype.search = function (text) {
+  var self = this
+  var searchers = []
+  for (var i in self.core_portals) {
+    var portal = self.core_portals[i]
+    var inst = require(portal.searcher)()
+    searchers.push(inst)
+  }
+  return fedsearch({fulltext: text}, searchers)
 }
 
 DPS.prototype.update = function (name, cb) {
@@ -155,18 +182,9 @@ DPS.prototype._add = function (resource) {
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
   var portals = []
-  // get built-in or "core" portals
-  var addonFiles = fs.readdirSync(PORTALS_PATH)
-  for (var i in addonFiles) {
-    var addon = addonFiles[i]
-    fs.readFile(path.join(PORTALS_PATH, addon), function (err, data) {
-      if (err) throw new Error(err)
-      portals.push(JSON.parse(data))
-    })
-  }
   return {
     resources: [],
-    portals: portals
+    portals: []
   }
 }
 

@@ -2,6 +2,7 @@
 var args = require('minimist')(process.argv.slice(2))
 var fs = require('fs')
 var path = require('path')
+var through = require('through2')
 var relativeDate = require('relative-date')
 var prettyBytes = require('pretty-bytes')
 
@@ -46,6 +47,7 @@ function exec (cmd) {
   }
 
   if (cmd === 'destroy') {
+    if (args.help) return usage('dps destroy removes everything!')
     return dps.destroy(function (err) {
       if (err) abort(err)
       console.log('goodbye')
@@ -61,6 +63,21 @@ function exec (cmd) {
     }
     if (name) return dps.check(name, cb)
     else return dps.checkAll(cb)
+  }
+
+  if (cmd === 'search') {
+    var query = args._[1]
+    if (args.help || !query) return usage('dps search <query>')
+    var stream = dps.search(query)
+    return stream.pipe(through.obj(function (results, enc, next) {
+      output = ''
+      var searcher = results.searcher
+      for (var i in results.data.items) {
+        var result = results.data.items[i]
+        output += searcher.name + ' | ' + result.title + ' \n  ' + result.url + '\n\n'
+      }
+      next(null, output)
+    })).pipe(process.stdout)
   }
 
   if (cmd === 'status' || cmd === 'st') {

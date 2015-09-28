@@ -108,7 +108,11 @@ var routes = {
   },
   portals: function (ctx, next) {
     ctx.template = templates.portals
-    ctx.data = {resources: dps.config.resources, portals: dps.config.portals}
+    ctx.data = {
+      resources: dps.config.resources,
+      core_portals: dps.core_portals,
+      portals: dps.config.portals
+    }
     render(ctx)
   },
   search: function (ctx, next) {

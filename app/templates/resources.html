@@ -9,7 +9,7 @@
 {{#each resources:i}}
   <div class="list-item" on-click="view:{{i}}">
     <div class="list-item__header">
-      <div class="clipped">{{this.name}}</div>
+      <div class="clipped list-item__header-text">{{this.name}}</div>
       <div class="list-item__header-info">{{prettyBytes(this.size)}} {{relativeDate(this.meta.checked)}}</div>
     </div>
     <div class="list-item__body">

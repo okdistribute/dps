@@ -94,6 +94,15 @@ p a {
   justify-content: space-between;
 }
 
+.list-item__header img {
+  max-width: 25%;
+  vertical-align: middle;
+}
+
+.list-item__header-text {
+  width: 75%;
+}
+
 .list-item__header-info {
   font-size: 12px;
   color: #C2ECC5;
