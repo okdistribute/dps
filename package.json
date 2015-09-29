@@ -22,7 +22,7 @@
   "homepage": "https://github.com/karissa/dps",
   "dependencies": {
     "cli-prompt": "^0.4.2",
-    "dat-ping": "^1.0.3",
+    "dat-ping": "^1.1.0",
     "debug": "^2.2.0",
     "dom": "0.0.3",
     "extend": "^3.0.0",
