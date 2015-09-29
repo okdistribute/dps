@@ -60,9 +60,8 @@ var events = {
     self.set('results', results)
     var read = iterate(dps.search(text))
     function loop () {
-      return self.set('loading', true)
+      self.set('loading', true)
       read(function (err, data, next) {
-        console.log(data)
         if (err) return onerror(err)
         for (var i in data.data.items) {
           var result = data.data.items[i]
@@ -71,6 +70,7 @@ var events = {
         self.set('results', results)
         self.set('loading', false)
         next()
+        loop()
       })
     }
     loop()

@@ -26,7 +26,7 @@
     "debug": "^2.2.0",
     "dom": "0.0.3",
     "extend": "^3.0.0",
-    "federated-search": "^1.0.4",
+    "federated-search": "^1.1.1",
     "format-data": "^2.1.2",
     "got": "^4.1.1",
     "minimist": "^1.2.0",
