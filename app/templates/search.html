@@ -2,5 +2,25 @@
 
 <div class="add form-inline">
   <input type="text" placeholder="enter a search query" value="{{searchText}}"/>
-  <button class="button" on-click="search">search</button>
+  <button class="button" on-click="search:{{searchText}}">search</button>
+</div>
+
+<a href="#" class="stop" on-click="stopSearch">stop</a>
+<div class="list">
+{{#if loading}}
+  Loading...
+{{/if}}
+{{#each results}}
+    <div class="list-item">
+    <div class="list-item__header">
+      <div class="clipped list-item__header-text">{{{this.title}}}</div>
+      <div class="list-item__header-info">{{relativeDate(this.modified_date)}}</div>
+    </div>
+    <div class="list-item__body">
+      <div class="list-item__info">
+        {{{this.description}}}
+      </div>
+    </div>
+  </div>
+{{/each}}
 </div>

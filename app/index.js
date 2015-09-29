@@ -1,6 +1,7 @@
 var path = require('path')
 var elementClass = require('element-class')
 var Ractive = require('ractive-toolkit')
+var iterate = require('stream-iterate')
 var page = require('page')
 var shell = require('shell')
 var dom = require('dom')
@@ -52,6 +53,27 @@ var events = {
       })
     })
     return false
+  },
+  search: function (event, text) {
+    var self = this
+    var results = []
+    self.set('results', results)
+    var read = iterate(dps.search(text))
+    function loop () {
+      return self.set('loading', true)
+      read(function (err, data, next) {
+        console.log(data)
+        if (err) return onerror(err)
+        for (var i in data.data.items) {
+          var result = data.data.items[i]
+          results.push(result)
+        }
+        self.set('results', results)
+        self.set('loading', false)
+        next()
+      })
+    }
+    loop()
   },
   doUpdate: function (event, name) {
     var self = this

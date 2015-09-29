@@ -41,6 +41,7 @@
     "run-parallel": "^1.1.2",
     "silence-chromium": "^2.0.0",
     "standard": "^5.3.1",
+    "stream-iterate": "^1.1.1",
     "through2": "^2.0.0"
   },
   "devDependencies": {

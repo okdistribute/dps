@@ -6,15 +6,21 @@
   </div>
 </div>
 <div class="list">
-  <h2>Searchable Portals</h2>
+  <h2>Core Portals</h2>
+  <input type="text" placeholder="filter portals" value="{{portalFilter}}"/>
   {{#each core_portals}}
   <div class="list-item" on-click="openUrl:{{this.url}}">
     <div class="list-item__header">
-      <div class="clipped list-item__header-text"><img src="{{this.icon}}" /> figshare </div>
+      <div class="clipped list-item__header-text"><img src="{{this.icon}}" /> {{this.name}}</div>
       <div class="list-item__header-info">{{this.url}}</div>
     </div>
     <div class="list-item__body">
+      <div class="list-item__info">
         {{this.description}}
+      </div>
+      <div class="list-item__controls">
+        <button class="button" on-click="disable:{{this.name}}">{{{images.refresh}}} disable</button>
+      </div>
     </div>
   </div>
   {{/each}}

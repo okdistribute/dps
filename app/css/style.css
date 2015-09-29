@@ -95,7 +95,7 @@ p a {
 }
 
 .list-item__header img {
-  max-width: 25%;
+  max-width: 25px;
   vertical-align: middle;
 }
 
@@ -118,12 +118,14 @@ p a {
 }
 
 .list-item__info {
-  max-width: 60%;
+  min-width: 60%;
+  max-width: 75%;
 }
 
 .list-item__controls {
   margin-top: 15px;
-  min-width: 175px;
+  max-width: 200px;
+  min-width: 100px;
 }
 
 .list-item__controls button:hover {

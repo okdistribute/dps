@@ -1,0 +1,8 @@
+{
+  "icon": "https://avatars3.githubusercontent.com/u/1630326?v=3&s=400",
+  "type": "ckan",
+  "name": "datahub",
+  "description": "The free, powerful data management platform from the Open Knowledge Foundation, based on the CKAN data management system.",
+  "searcher": "ckan-search",
+  "url": "http://datahub.io"
+}
