@@ -1,16 +1,14 @@
 <h2>Portals</h2>
 <div class="form">
-  <input type="text" placeholder="add new portal URL" value="{{url}}"/>
+  <input type="text" placeholder="type portal url (e.g., http://data.beta.nyc/)"  value="{{url}}"/>
   <div class="add form-inline">
-    <input type="text" placeholder="socrata, ckan..." value="{{type}}"/>
+    <input type="text" placeholder="add portal type (e.g., ckan)" value="{{type}}"/>
     <button class="button" on-click="addPortal">add</button>
   </div>
 </div>
-<h3>List</h3>
 <div class="list">
-  <input type="text" placeholder="enter filter text.." value="{{searchTerm}}"/>
+  <!--<input type="text" placeholder="enter filter text.." value="{{searchTerm}}"/>-->
   {{#each core_portals}}
-    {{# filter(this, searchTerm, ['name', 'description']) }}
     <div class="list-item" on-click="openUrl:{{this.url}}">
       <div class="list-item__header">
         <div class="clipped list-item__header-text"><img src="{{this.icon}}" /> {{this.name}}</div>
@@ -25,6 +23,5 @@
         </div>
       </div>
     </div>
-    {{/}}
   {{/each}}
 </div>
