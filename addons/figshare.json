@@ -3,6 +3,6 @@
   "type": "figshare",
   "name": "figshare",
   "description": "figshare is a repository where users can make all of their research outputs available in a citable, shareable and discoverable manner.",
-  "searcher": "figshare-search",
+  "searcher": "figshare",
   "url": "http://figshare.com"
 }
