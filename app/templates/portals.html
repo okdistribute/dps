@@ -1,3 +1,4 @@
+<h2>Portals</h2>
 <div class="form">
   <input type="text" placeholder="add new portal URL" value="{{url}}"/>
   <div class="add form-inline">
@@ -5,9 +6,9 @@
     <button class="button" on-click="addPortal">add</button>
   </div>
 </div>
+<h3>List</h3>
 <div class="list">
-  <h2>Core Portals</h2>
-  <input type="text" placeholder="filter portals" value="{{searchTerm}}"/>
+  <input type="text" placeholder="enter filter text.." value="{{searchTerm}}"/>
   {{#each core_portals}}
     {{# filter(this, searchTerm, ['name', 'description']) }}
     <div class="list-item" on-click="openUrl:{{this.url}}">
