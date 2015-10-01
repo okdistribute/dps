@@ -27,7 +27,7 @@ function exec (cmd) {
   }
 
   if (cmd === 'add') {
-    var location = args._[1]
+    location = args._[1]
     if (!location) return usage('dps add <location>')
   }
 
