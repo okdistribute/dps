@@ -84,15 +84,15 @@ var events = {
     })
     return false
   },
-  add: function () {
+  download: function () {
     var self = this
     var location = self.get('location')
     var args = {}
     if (location.trim().length === 0) return
-    dps.add(location, args, function (err, resource) {
+    dps.download(location, args, function (err, resource) {
       if (err) return onerror(err)
       self.set('location', '')
-      done(self, resource.name + ' added successfully!')
+      done(self, resource.name + ' downloaded successfully!')
     })
     return false
   },

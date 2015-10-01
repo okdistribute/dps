@@ -39,12 +39,12 @@ function getCorePortals () {
 
 util.inherits(DPS, events.EventEmitter)
 
-DPS.prototype.add = function (location, args, cb) {
+DPS.prototype.download = function (location, args, cb) {
   var self = this
+  var name = args.name || normalize(location) // should a name be required?
+
   if (self.get({location: location})) return cb(new Error('Resource at url', location, 'already added.'))
   if (self.get({name: name})) return cb(new Error('Resource exists with name', name))
-
-  var name = args.name || normalize(location) // should a name be required?
 
   var resource = {
     location: location,

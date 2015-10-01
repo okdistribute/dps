@@ -9,7 +9,7 @@ With open data comes a price. It's difficult to track and manage all of the urls
 ## Example
 
 ```
-dps add http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q cookcounty.geo
+dps get http://www.opendatacache.com/cookcounty.socrata.com/api/geospatial/26nm-wd5q cookcounty.geo
 ```
 
 This puts the following entry into `dps.json`:
@@ -26,10 +26,10 @@ This puts the following entry into `dps.json`:
 }
 ```
 
-Then I can add another one..
+Then I can get another one..
 
 ```
-$ dps add http://eukaryota.dathub.org/
+$ dps get http://eukaryota.dathub.org/
 ```
 
 And this is also added to the `dps.json`:
@@ -71,11 +71,14 @@ http://localhost:6442
 
 ## CLI api
 
-### `dps add <url> <name>`
-  * name will be found through any 'tracked' registries.
+### `dps get <url> <path> --name=<a nice name>`
   * url could be the url of anything that gives data with HTTP GET (not in a tracked registry)
   * auto-detects dat endpoints and tracks version changes
-  * `dps update/` will triger the re-download of this data
+  * `dps update` will trigger the re-download of this data
+
+### `dps add <dir>`
+  * something that's already downloaded will become tracked by dps
+  * requires valid datapackage.json or dps.json in the root folder of the path
 
 ### `dps update [dataset] [--trackers]`
   * updates a given dataset, or all datasets.
