@@ -20,8 +20,8 @@ This puts the following entry into `dps.json`:
   name: 'cookcounty.geo',
   size: 618400,
   meta: {
-    modified: Wed Jun 24 2015 14:52:26 GMT-0700 (PDT),
-    checked: Tue Sep 22 2015 01:51:43 GMT-0700 (PDT)
+    modified: 'Wed Jun 24 2015 14:52:26 GMT-0700 (PDT)',
+    checked: 'Tue Sep 22 2015 01:51:43 GMT-0700 (PDT)'
   }
 }
 ```
@@ -43,8 +43,8 @@ And this is also added to the `dps.json`:
   description: 'some description',
   publisher: 'maxogden',
   meta: {
-    modified: Mon Sep 21 2015 21:07:41 GMT-0700 (PDT),
-    checked: Tue Sep 22 2015 01:52:57 GMT-0700 (PDT),
+    modified: 'Mon Sep 21 2015 21:07:41 GMT-0700 (PDT)',
+    checked: 'Tue Sep 22 2015 01:52:57 GMT-0700 (PDT)',
   }
 }
 ```
