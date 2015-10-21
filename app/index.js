@@ -11,28 +11,7 @@ var ipc = require('ipc')
 var dps = require('..')() // TODO: support projects
 var IMG_PATH = path.join(__dirname, 'img')
 
-function onerror (err) {
-  var message = err.stack || err.message || JSON.stringify(err)
-  console.error(message)
-  window.alert(message)
-}
-
-function done (ractive, message) {
-  dps.save(function (err) {
-    if (err) return onerror(err)
-    ractive.set('resources', dps.config.resources)
-    ractive.message('success', message)
-  })
-}
-
-function ask (ractive, cb) {
-  ractive.fire('toggleModal')
-  var submit = dom('.modal button[type="submit"]')[0]
-  submit.onclick = function () {
-    cb()
-    ractive.fire('toggleModal')
-  }
-}
+var ACTIVE_DOWNLOADERS = {}
 
 var events = {
   view: function (event, id) {
@@ -84,16 +63,46 @@ var events = {
     })
     return false
   },
-  download: function () {
+  download: function (event) {
     var self = this
     var location = self.get('location')
     var args = {}
     if (location.trim().length === 0) return
-    dps.download(location, args, function (err, resource) {
+
+    var downloader = dps.download(location, args)
+    downloader.finished = false
+    downloader.on('done', function (err, resource) {
       if (err) return onerror(err)
-      self.set('location', '')
+      downloader.finished = true
+      update()
       done(self, resource.name + ' downloaded successfully!')
     })
+    downloader.on('resource', function (resource) {
+      downloader.resource = resource
+    })
+    downloader.on('child', function (child) {
+      child.stdout.on('data', function (data, enc, next) {
+        downloader.output += data.toString()
+        update()
+        next(null, data)
+      })
+      child.stderr.on('data', function (data) {
+        downloader.output += data.toString()
+        update()
+      })
+    })
+    function progress (stream) {
+      stream.on('data', function (data, enc, next) {
+        downloader.progress += data.length
+        update()
+        next(null, data)
+      })
+    }
+    ACTIVE_DOWNLOADERS[location] = downloader
+    progress(downloader)
+    function update () {
+      self.set('downloaders', ACTIVE_DOWNLOADERS)
+    }
     return false
   },
   openUrl: function (event, url) {
@@ -110,7 +119,7 @@ var templates = {
   about: fs.readFileSync(path.join(__dirname, 'templates', 'about.html')).toString(),
   resources: fs.readFileSync(path.join(__dirname, 'templates', 'resources.html')).toString(),
   view: fs.readFileSync(path.join(__dirname, 'templates', 'view.html')).toString(),
-  portals: fs.readFileSync(path.join(__dirname, 'templates', 'portals.html')).toString()
+  downloaders: fs.readFileSync(path.join(__dirname, 'templates', 'downloaders.html')).toString()
 }
 
 var routes = {
@@ -126,6 +135,11 @@ var routes = {
   resources: function (ctx, next) {
     ctx.template = templates.resources
     ctx.data = {resources: dps.config.resources}
+    render(ctx)
+  },
+  downloaders: function (ctx, next) {
+    ctx.template = templates.downloaders
+    ctx.data = {downloaders: ACTIVE_DOWNLOADERS}
     render(ctx)
   },
   portals: function (ctx, next) {
@@ -149,6 +163,7 @@ page('/', routes.resources)
 page('/search', routes.search)
 page('/about', routes.about)
 page('/portals', routes.portals)
+page('/downloads', routes.downloaders)
 page('/view/:id', routes.view)
 // initialize
 page.start()
@@ -190,4 +205,27 @@ function render (ctx) {
 
   ract.on(events)
   return ract
+}
+
+function onerror (err) {
+  var message = err.stack || err.message || JSON.stringify(err)
+  console.error(message)
+  window.alert(message)
+}
+
+function done (ractive, message) {
+  dps.save(function (err) {
+    if (err) return onerror(err)
+    ractive.set('resources', dps.config.resources)
+    ractive.message('success', message)
+  })
+}
+
+function ask (ractive, cb) {
+  ractive.fire('toggleModal')
+  var submit = dom('.modal button[type="submit"]')[0]
+  submit.onclick = function () {
+    cb()
+    ractive.fire('toggleModal')
+  }
 }

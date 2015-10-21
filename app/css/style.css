@@ -16,6 +16,14 @@ body {
   display: flex;
 }
 
+pre.output {
+  background-color: #222;
+  overflow: scroll;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
 .sidebar {
   flex-direction: column;
   padding: 10px 0px;

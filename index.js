@@ -39,12 +39,11 @@ function getCorePortals () {
 
 util.inherits(DPS, events.EventEmitter)
 
-DPS.prototype.download = function (location, args, cb) {
+DPS.prototype.download = function (location, args) {
   var self = this
   var name = args.name || normalize(location) // should a name be required?
-
-  if (self.get({location: location})) return cb(new Error('Resource at url', location, 'already added.'))
-  if (self.get({name: name})) return cb(new Error('Resource exists with name', name))
+  var existingResource = self.get({location: location}) || self.get({name: name})
+  if (existingResource) return self._updateResource(resource)
 
   var resource = {
     location: location,
@@ -53,16 +52,14 @@ DPS.prototype.download = function (location, args, cb) {
   }
 
   var downloader = download(self.dir, resource)
-
-  downloader.on('error', function (err) {
-    return cb(err)
-  })
-
-  downloader.on('resource', function (resource) {
-    self._add(resource)
-    cb(null, resource)
+  downloader.on('done', function (err, resource) {
+    if (!err) self._add(resource)
   })
   return downloader
+}
+
+DPS.prototype.add = function (location, args) {
+  // TODO: add a local directory to the tracker..
 }
 
 DPS.prototype.search = function (text) {
