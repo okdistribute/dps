@@ -52,11 +52,17 @@ DPS.prototype.download = function (location, args, cb) {
     name: name
   }
 
-  return download(self.dir, resource, function (err) {
-    if (err) return cb(err)
+  var downloader = download(self.dir, resource)
+
+  downloader.on('error', function (err) {
+    return cb(err)
+  })
+
+  downloader.on('resource', function (resource) {
     self._add(resource)
     cb(null, resource)
   })
+  return downloader
 }
 
 DPS.prototype.search = function (text) {

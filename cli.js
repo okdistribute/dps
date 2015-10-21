@@ -10,25 +10,25 @@ var dps = require('./')(args.path)
 exec(args._[0])
 
 function exec (cmd) {
-  if (cmd === 'get') {
-    var location = args._[1]
-    if (!location || args.help) return usage('dps get <location> [path] -n <a nice name>')
+  if (cmd === 'download') {
+    var url = args._[1]
+    if (!url || args.help) return usage('dps download <url> [path] -n <a nice name>')
     args.name = args.name || args.n || args._[2]
-    var stream = dps.download(location, args, function (err, resource) {
+    var downloader = dps.download(url, args, function (err, resource) {
       if (err) abort(err)
-      done(resource)
+      console.log(resource)
     })
-    if (stream && stream.stdout) {
-      console.log('got stream')
-      stream.stdout.pipe(process.stdout)
-      stream.stderr.pipe(process.stderr)
-    }
-    return stream
+    downloader.on('child', function (child) {
+      child.stdout.pipe(process.stdout)
+      child.stderr.pipe(process.stderr)
+    })
+    return
   }
 
   if (cmd === 'add') {
-    location = args._[1]
+    var location = args._[1]
     if (!location) return usage('dps add <location>')
+    return dps.add(location, args)
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
