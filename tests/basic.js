@@ -10,7 +10,7 @@ test('add/get/destroy', function (t) {
   dps.destroy(function (err) {
     t.ifError(err)
     var downloader = dps.download(location, {name: 'cookcounty.csv'})
-    downloader.on('done', function (resource) {
+    downloader.on('done', function (err, resource) {
       t.ifError(err)
       t.same(resource.location, location, 'location same')
       t.same(resource.name, 'cookcounty.csv', 'name same')

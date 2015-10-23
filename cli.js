@@ -15,7 +15,7 @@ function exec (cmd) {
     if (!url || args.help) return usage('dps download <url> [path] -n <a nice name>')
     args.name = args.name || args.n || args._[2]
     var downloader = dps.download(url, args)
-    downloader.on('done', function (resource) {
+    downloader.on('done', function (err, resource) {
       if (err) abort(err)
       console.log(resource)
     })

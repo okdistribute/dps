@@ -82,7 +82,7 @@ DPS.prototype.update = function (name, cb) {
 DPS.prototype._updateResource = function (resource, cb) {
   var self = this
   var downloader = download(self.dir, resource)
-  downloader.on('done', function (newResource) {
+  downloader.on('done', function (err, newResource) {
     if (err) return cb(err)
     var i = self._get_index(resource)
     self.config.resources[i] = newResource
