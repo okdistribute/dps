@@ -9,7 +9,8 @@ var location = 'http://www.opendatacache.com/cookcounty.socrata.com/api/views/26
 test('add/get/destroy', function (t) {
   dps.destroy(function (err) {
     t.ifError(err)
-    dps.download(location, {name: 'cookcounty.csv'}, function (err, resource) {
+    var downloader = dps.download(location, {name: 'cookcounty.csv'})
+    downloader.on('done', function (resource) {
       t.ifError(err)
       t.same(resource.location, location, 'location same')
       t.same(resource.name, 'cookcounty.csv', 'name same')

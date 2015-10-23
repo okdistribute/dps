@@ -14,7 +14,8 @@ function exec (cmd) {
     var url = args._[1]
     if (!url || args.help) return usage('dps download <url> [path] -n <a nice name>')
     args.name = args.name || args.n || args._[2]
-    var downloader = dps.download(url, args, function (err, resource) {
+    var downloader = dps.download(url, args)
+    downloader.on('done', function (resource) {
       if (err) abort(err)
       console.log(resource)
     })
@@ -101,7 +102,7 @@ function exec (cmd) {
   }
 
   if (cmd === 'track') {
-    var url = args._[1]
+    url = args._[1]
     return dps.addPortal(url, args, function (err, portal) {
       if (err) abort(err)
       done(portal)

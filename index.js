@@ -43,7 +43,7 @@ DPS.prototype.download = function (location, args) {
   var self = this
   var name = args.name || normalize(location) // should a name be required?
   var existingResource = self.get({location: location}) || self.get({name: name})
-  if (existingResource) return self._updateResource(resource)
+  if (existingResource) return self._updateResource(existingResource)
 
   var resource = {
     location: location,
@@ -81,7 +81,8 @@ DPS.prototype.update = function (name, cb) {
 
 DPS.prototype._updateResource = function (resource, cb) {
   var self = this
-  download(self.dir, resource, function (err, newResource) {
+  var downloader = download(self.dir, resource)
+  downloader.on('done', function (newResource) {
     if (err) return cb(err)
     var i = self._get_index(resource)
     self.config.resources[i] = newResource
