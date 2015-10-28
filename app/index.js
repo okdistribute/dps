@@ -8,6 +8,8 @@ var dom = require('dom')
 var fs = require('fs')
 var ipc = require('ipc')
 
+var editable = require('./lib/editable.js')
+
 var dps = require('..')() // TODO: support projects
 var IMG_PATH = path.join(__dirname, 'img')
 
@@ -184,6 +186,10 @@ function render (ctx) {
         cl.remove(type)
       }, 2000)
     }
+  })
+
+  editable(document.body, '.editable', function (contents) {
+    console.log('yo', contents)
   })
 
   dom('.sidebar__item').each(function (el) {
