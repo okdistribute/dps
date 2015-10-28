@@ -4,13 +4,13 @@ var fs = require('fs')
 var path = require('path')
 var dps = require('..')(tmp)
 
-var location = 'http://www.opendatacache.com/cookcounty.socrata.com/api/views/26vc-nmf3/rows.csv'
+var location = 'http://localhost:6442'
 
 test('add/get/destroy', function (t) {
   dps.destroy(function (err) {
     t.ifError(err)
     var downloader = dps.download(location, {name: 'cookcounty.csv'})
-    downloader.on('done', function (err, resource) {
+    downloader.on('done', function (resource) {
       t.ifError(err)
       t.same(resource.location, location, 'location same')
       t.same(resource.name, 'cookcounty.csv', 'name same')

@@ -68,12 +68,12 @@ var events = {
     var location = self.get('location')
     var args = {}
     if (location.trim().length === 0) return
+    self.set('location', null)
 
     var downloader = dps.download(location, args)
-    downloader.finished = false
-    downloader.on('done', function (err, resource) {
-      if (err) return onerror(err)
-      downloader.finished = true
+    ACTIVE_DOWNLOADERS[location] = downloader
+    downloader.on('error', onerror)
+    downloader.on('done', function (resource) {
       update()
       done(self, resource.name + ' downloaded successfully!')
     })
@@ -81,10 +81,9 @@ var events = {
       downloader.resource = resource
     })
     downloader.on('child', function (child) {
-      child.stdout.on('data', function (data, enc, next) {
+      child.stdout.on('data', function (data) {
         downloader.output += data.toString()
         update()
-        next(null, data)
       })
       child.stderr.on('data', function (data) {
         downloader.output += data.toString()
@@ -98,7 +97,6 @@ var events = {
         next(null, data)
       })
     }
-    ACTIVE_DOWNLOADERS[location] = downloader
     progress(downloader)
     function update () {
       self.set('downloaders', ACTIVE_DOWNLOADERS)

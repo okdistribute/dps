@@ -5,20 +5,21 @@
 {{#each downloaders:i}}
   <div class="list-item">
     <div class="list-item__header">
-      <div class="clipped list-item__header-text">{{this.name}}</div>
-      <div class="list-item__header-info">{{prettyBytes(this.size)}} </div>
+      <div class="clipped list-item__header-text">{{this.resource.name}}</div>
+      <div class="list-item__header-info">{{prettyBytes(this.resource.size)}} </div>
     </div>
     <div class="list-item__body">
-      <div class="list-item__info clipped">
+      <div class="list-item__progress clipped">
         {{#if this.finished}}
         All Done!
         {{else}}
         {{#if this.progress}} {{this.progress}} / {{/if}} {{prettyBytes(this.resource.size)}}
         {{/if}}
+        <pre class="output">
+          {{this.output}}
+        </pre>
+      </div>
     </div>
-    <pre class="output">
-      {{this.output}}
-    </pre>
   </div>
 {{/each}}
 </div>

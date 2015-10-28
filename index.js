@@ -52,8 +52,8 @@ DPS.prototype.download = function (location, args) {
   }
 
   var downloader = download(self.dir, resource)
-  downloader.on('done', function (err, resource) {
-    if (!err) self._add(resource)
+  downloader.on('done', function (resource) {
+    self._add(resource)
   })
   return downloader
 }
@@ -75,19 +75,24 @@ DPS.prototype.search = function (text) {
 
 DPS.prototype.update = function (name, cb) {
   var self = this
-  if (name) return self._updateResource(self.get({name: name}), cb)
-  else return self._parallelize(self._updateResource, cb)
+  if (name) {
+    var downloader = self._updateResource(self.get({name: name}))
+    downloader.on('error', cb)
+    downloader.on('done', function (resource) {
+      return cb()
+    })
+  }
+  else self._parallelize(self._updateResource, cb)
 }
 
-DPS.prototype._updateResource = function (resource, cb) {
+DPS.prototype._updateResource = function (resource) {
   var self = this
   var downloader = download(self.dir, resource)
-  downloader.on('done', function (err, newResource) {
-    if (err) return cb(err)
+  downloader.on('done', function (newResource) {
     var i = self._get_index(resource)
     self.config.resources[i] = newResource
-    cb(null, resource)
   })
+  return downloader
 }
 
 DPS.prototype.addPortal = function (url, args, cb) {
@@ -149,9 +154,9 @@ DPS.prototype.get = function (opts) {
 
 DPS.prototype.destroy = function (cb) {
   var self = this
-  self._parallelize(function (resource, done) {
+  self._parallelize(function destroyResource (resource, done) {
     rimraf(self._resourcePath(resource), done)
-  }, function () {
+  }, function destroyConfig () {
     rimraf(self.configPath, cb)
   })
 }

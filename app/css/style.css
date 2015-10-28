@@ -125,6 +125,11 @@ p a {
   justify-content: space-between;
 }
 
+.list-item__progress {
+  display: flex;
+  flex-direction: column;
+}
+
 .list-item__info {
   min-width: 60%;
   max-width: 75%;
