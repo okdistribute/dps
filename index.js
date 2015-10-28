@@ -15,8 +15,7 @@ module.exports = DPS
 
 function DPS (dir) {
   if (!(this instanceof DPS)) return new DPS(dir)
-  if (!dir) dir = process.cwd()
-  this.dir = dir
+  this.dir = dir || process.cwd()
   this.configPath = path.join(this.dir, CONFIG_FILE)
   this.config = readConfig(this.configPath)
   this.core_portals = getCorePortals()
@@ -54,6 +53,7 @@ DPS.prototype.download = function (location, args) {
   var downloader = download(self.dir, resource)
   downloader.on('done', function (resource) {
     self._add(resource)
+    self.save()
   })
   return downloader
 }
@@ -79,7 +79,7 @@ DPS.prototype.update = function (name, cb) {
     var downloader = self._updateResource(self.get({name: name}))
     downloader.on('error', cb)
     downloader.on('done', function (resource) {
-      return cb()
+      self.save(cb)
     })
   }
   else self._parallelize(self._updateResource, cb)
