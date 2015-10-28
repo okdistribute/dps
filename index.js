@@ -42,7 +42,7 @@ DPS.prototype.download = function (location, args) {
   var self = this
   var name = args.name || normalize(location) // should a name be required?
   var existingResource = self.get({location: location}) || self.get({name: name})
-  if (existingResource) return self._updateResource(existingResource)
+  if (existingResource) return self.updateResource(existingResource)
 
   var resource = {
     location: location,
@@ -52,7 +52,7 @@ DPS.prototype.download = function (location, args) {
 
   var downloader = download(self.dir, resource)
   downloader.on('done', function (resource) {
-    self._add(resource)
+    addToConfig(self.config, resource)
     self.save()
   })
   return downloader
@@ -73,24 +73,18 @@ DPS.prototype.search = function (text) {
   return fedsearch({fulltext: text}, searchers)
 }
 
-DPS.prototype.update = function (name, cb) {
+DPS.prototype.update = function (cb) {
   var self = this
-  if (name) {
-    var downloader = self._updateResource(self.get({name: name}))
-    downloader.on('error', cb)
-    downloader.on('done', function (resource) {
-      self.save(cb)
-    })
-  }
-  else self._parallelize(self._updateResource, cb)
+  self._parallelize(self.updateResource, cb)
 }
 
-DPS.prototype._updateResource = function (resource) {
+DPS.prototype.updateResource = function (resource, cb) {
   var self = this
+  var i = self._get_index(resource)
   var downloader = download(self.dir, resource)
   downloader.on('done', function (newResource) {
-    var i = self._get_index(resource)
     self.config.resources[i] = newResource
+    self.save(cb)
   })
   return downloader
 }
@@ -126,7 +120,7 @@ DPS.prototype.remove = function (name, cb) {
   if (!resource) return cb(new Error('Resource not found with name', name))
   rimraf(resource.name, function (err) {
     if (err) return cb(err)
-    self._remove(name)
+    removeFromConfig(self.config, name)
     cb()
   })
 }
@@ -167,25 +161,24 @@ DPS.prototype._parallelize = function (func, cb) {
   for (var i in self.config.resources) {
     (function (i) {
       tasks.push(function (done) {
-        func(self.config.resources[i], done)
+        func.call(self, self.config.resources[i], done)
       })
     })(i)
   }
   parallel(tasks, cb)
 }
 
-DPS.prototype._remove = function (name) {
-  var self = this
-  var newResources = []
-  for (var i in self.config.resources) {
-    var resource = self.config.resources[i]
-    if (resource.name !== name) newResources.push(resource)
-  }
-  self.config.resources = newResources
+function addToConfig (config, resource) {
+  config.resources.push(resource)
 }
 
-DPS.prototype._add = function (resource) {
-  this.config.resources.push(resource)
+function removeFromConfig (config, name) {
+  var newResources = []
+  for (var i in config.resources) {
+    var resource = config.resources[i]
+    if (resource.name !== name) newResources.push(resource)
+  }
+  config.resources = newResources
 }
 
 function readConfig (configPath) {

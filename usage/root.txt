@@ -1,8 +1,7 @@
 usage: dps <command(s)> [--flag] [--key=value]
 
 commands:
-  add       download source
-  check     get metadata about a source
+  download  download data source
   update    update previously downloaded sources
   rm        remove a source
   status    get status on current sources
