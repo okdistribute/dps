@@ -11,7 +11,7 @@ var ipc = require('ipc')
 var dps = require('..')() // TODO: support projects
 var IMG_PATH = path.join(__dirname, 'img')
 
-var ACTIVE_DOWNLOADERS = {}
+var ACTIVE_DOWNLOADERS = []
 
 var events = {
   view: function (event, id) {
@@ -71,10 +71,9 @@ var events = {
     self.set('location', null)
 
     var downloader = dps.download(location, args)
-    ACTIVE_DOWNLOADERS[location] = downloader
+    ACTIVE_DOWNLOADERS.push(downloader)
     downloader.on('error', onerror)
     downloader.on('done', function (resource) {
-      update()
       done(self, resource.name + ' downloaded successfully!')
     })
     downloader.on('resource', function (resource) {
@@ -83,24 +82,19 @@ var events = {
     downloader.on('child', function (child) {
       child.stdout.on('data', function (data) {
         downloader.output += data.toString()
-        update()
       })
       child.stderr.on('data', function (data) {
         downloader.output += data.toString()
-        update()
       })
     })
     function progress (stream) {
       stream.on('data', function (data, enc, next) {
         downloader.progress += data.length
-        update()
         next(null, data)
       })
     }
     progress(downloader)
-    function update () {
-      self.set('downloaders', ACTIVE_DOWNLOADERS)
-    }
+    self.set('downloaders', ACTIVE_DOWNLOADERS)
     return false
   },
   openUrl: function (event, url) {
@@ -115,7 +109,7 @@ var events = {
 var templates = {
   search: fs.readFileSync(path.join(__dirname, 'templates', 'search.html')).toString(),
   about: fs.readFileSync(path.join(__dirname, 'templates', 'about.html')).toString(),
-  resources: fs.readFileSync(path.join(__dirname, 'templates', 'resources.html')).toString(),
+  data: fs.readFileSync(path.join(__dirname, 'templates', 'data.html')).toString(),
   view: fs.readFileSync(path.join(__dirname, 'templates', 'view.html')).toString(),
   downloaders: fs.readFileSync(path.join(__dirname, 'templates', 'downloaders.html')).toString()
 }
@@ -130,8 +124,8 @@ var routes = {
     ctx.data = {resource: dps.config.resources[ctx.params.id]}
     render(ctx)
   },
-  resources: function (ctx, next) {
-    ctx.template = templates.resources
+  data: function (ctx, next) {
+    ctx.template = templates.data
     ctx.data = {resources: dps.config.resources}
     render(ctx)
   },
@@ -157,7 +151,8 @@ var routes = {
 }
 
 // set up routes
-page('/', routes.resources)
+page('/', routes.data)
+page('/data', routes.data)
 page('/search', routes.search)
 page('/about', routes.about)
 page('/portals', routes.portals)
