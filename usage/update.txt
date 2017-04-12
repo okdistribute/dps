@@ -1,6 +1,6 @@
 dps update [name]
 
-  Updates all tracked datasets to their most recent distributions.
+  Updates all datasets.
 
 Parameters:
 

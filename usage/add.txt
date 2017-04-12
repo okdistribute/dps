@@ -1,6 +1,6 @@
 dps add <location> [name]
 
-  Adds a data source to the trackable local or global dps repository.
+  Adds a data source to the dps repository.
 
 Parameters:
 
