@@ -110,14 +110,6 @@ function exec (cmd) {
     else return dps.checkAll(cb)
   }
 
-  if (cmd === 'track') {
-    url = args._[1]
-    return dps.addPortal(url, args, function (err, portal) {
-      if (err) abort(err)
-      done(portal)
-    })
-  }
-
   usage('root')
 }
 
