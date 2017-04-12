@@ -9,28 +9,17 @@ var prettyBytes = require('pretty-bytes')
 var dps = require('./')(args.path)
 exec(args._[0])
 
-function ondownload (downloader) {
-  downloader.on('done', function (resource) {
-    console.log(resource)
-  })
-  downloader.on('child', function (child) {
-    child.stdout.pipe(process.stdout)
-    child.stderr.pipe(process.stderr)
-  })
-  downloader.on('error', abort)
+function ondownload (err, resource) {
+  if (err) return abort(err)
+  console.log(resource)
 }
 
 function exec (cmd) {
-  if (cmd === 'download') {
-    var url = args._[1]
-    if (!url || args.help) return usage('dps download <url> [path] -n <a nice name>')
-    args.name = args.name || args.n || args._[2]
-    var downloader = dps.download(url, args)
-    return ondownload(downloader)
-  }
-
   if (cmd === 'add') {
-    return usage('Not Implemented! Help out: http://github.com/karissa/dps')
+    var url = args._[1]
+    if (!url || args.help) return usage('add')
+    args.name = args.name || args.n || args._[2]
+    return dps.download(url, args, ondownload)
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
@@ -43,7 +32,7 @@ function exec (cmd) {
   }
 
   if (cmd === 'update') {
-    if (args.help) return usage('dps update [name]')
+    if (args.help) return usage('update')
     name = args._[1]
     if (!name) {
       return dps.update(function (err) {
@@ -56,8 +45,7 @@ function exec (cmd) {
       if (err) abort(err)
       done(data)
     }
-    downloader = dps.updateResource(resource, cb)
-    return ondownload(downloader)
+    dps.updateResource(resource, ondownload)
   }
 
   if (cmd === 'destroy') {
@@ -83,7 +71,7 @@ function exec (cmd) {
   }
 
   if (cmd === 'status' || cmd === 'st') {
-    if (args.help) return usage('dps status')
+    if (args.help) return usage('status')
     cb = function (err, data) {
       if (err) abort(err)
       var output = ''
@@ -115,7 +103,7 @@ function exec (cmd) {
     })
   }
 
-  usage(fs.readFileSync(path.join(__dirname, '/usage/root.txt')).toString())
+  usage('root')
 }
 
 function done (message) {
@@ -130,7 +118,8 @@ function abort (err) {
   process.exit(1)
 }
 
-function usage (message) {
+function usage (name) {
+  var message = fs.readFileSync(path.join(__dirname, 'usage', name + '.txt')).toString()
   console.error(message)
   process.exit(0)
 }

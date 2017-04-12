@@ -6,8 +6,12 @@ Parameters:
 
   <location>: required
 
-    URL or filepath of the data source.
+    URL or filepath to executable.
 
   [name]: optional
 
     A user-friendly name for the data source.
+
+  --type : optional
+
+    Inferred from input, but can be forced. Could be `url`, `dat`, `ftp`, `zip`

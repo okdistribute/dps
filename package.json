@@ -30,6 +30,7 @@
     "format-data": "^2.1.2",
     "got": "^4.1.1",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "npm-execspawn": "^1.2.1",
     "page": "^1.6.3",
     "pretty-bytes": "^2.0.1",

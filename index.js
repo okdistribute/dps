@@ -9,7 +9,6 @@ var download = require('./lib/download.js')
 var fetch = require('./lib/fetch.js')
 
 var CONFIG_FILE = 'dps.json'
-var PORTALS_PATH = path.join(__dirname, 'addons')
 
 module.exports = DPS
 
@@ -18,31 +17,17 @@ function DPS (dir) {
   this.dir = dir || process.cwd()
   this.configPath = path.join(this.dir, CONFIG_FILE)
   this.config = readConfig(this.configPath)
-  this.core_portals = getCorePortals()
 
   events.EventEmitter.call(this)
 }
 
-function getCorePortals () {
-  // get built-in or "core" portals
-  // TODO: this is just for demo, prob needs a refactor
-  var portals = []
-  var addonFiles = fs.readdirSync(PORTALS_PATH)
-  for (var i in addonFiles) {
-    var addon = addonFiles[i]
-    var data = fs.readFileSync(path.join(PORTALS_PATH, addon))
-    portals.push(JSON.parse(data))
-  }
-  return portals
-}
-
 util.inherits(DPS, events.EventEmitter)
 
-DPS.prototype.download = function (location, args) {
+DPS.prototype.download = function (location, args, cb) {
   var self = this
   var name = args.name || normalize(location) // should a name be required?
   var existingResource = self.get({location: location}) || self.get({name: name})
-  if (existingResource) return self.updateResource(existingResource)
+  if (existingResource) return self.updateResource(existingResource, cb)
 
   var resource = {
     location: location,
@@ -50,28 +35,19 @@ DPS.prototype.download = function (location, args) {
     name: name
   }
 
-  var downloader = download(self.dir, resource)
-  downloader.on('done', function (resource) {
+  download(self.dir, resource, function (err, resource) {
     addToConfig(self.config, resource)
-    self.save()
+    self.save(function (err) {
+      if (err) return cb(err)
+      return cb(null, resource)
+    })
   })
-  return downloader
 }
 
 DPS.prototype.add = function (location, args) {
   // TODO: add a local directory to the tracker..
 }
 
-DPS.prototype.search = function (text) {
-  var self = this
-  var searchers = []
-  for (var i in self.core_portals) {
-    var portal = self.core_portals[i]
-    var inst = require(portal.searcher)()
-    searchers.push(inst)
-  }
-  return fedsearch({fulltext: text}, searchers)
-}
 
 DPS.prototype.update = function (cb) {
   var self = this
@@ -81,23 +57,13 @@ DPS.prototype.update = function (cb) {
 DPS.prototype.updateResource = function (resource, cb) {
   var self = this
   var i = self._get_index(resource)
-  var downloader = download(self.dir, resource)
-  downloader.on('done', function (newResource) {
+  download(self.dir, resource, function (err, newResource) {
     self.config.resources[i] = newResource
-    self.save(cb)
+    self.save(function (err) {
+      if (err) return cb(err)
+      return cb(null, newResource)
+    })
   })
-  return downloader
-}
-
-DPS.prototype.addPortal = function (url, args, cb) {
-  var self = this
-  var portal = {
-    type: args.type,
-    url: url,
-    opts: args
-  }
-  self.config.portals.push(portal)
-  return portal
 }
 
 DPS.prototype.checkAll = function (cb) {
@@ -136,7 +102,6 @@ DPS.prototype._get_index = function (query) {
 }
 
 DPS.prototype._resourcePath = function (resource) {
-  // TODO: can we get deduplicate downloads on a single machine?
   return path.join(this.dir, resource.name)
 }
 
@@ -184,8 +149,7 @@ function removeFromConfig (config, name) {
 function readConfig (configPath) {
   if (fs.existsSync(configPath)) return JSON.parse(fs.readFileSync(configPath))
   return {
-    resources: [],
-    portals: []
+    resources: []
   }
 }
 
