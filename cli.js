@@ -21,6 +21,7 @@ function exec (cmd) {
 
     return fetch(url, args, function (err, resource) {
       if (err) abort(err)
+      process.stdout.write('Downloading...')
       if (resource.size) {
         var bar = progress({width: 25, total: resource.size})
         var interval = setInterval(function () {
@@ -34,6 +35,7 @@ function exec (cmd) {
       diff.pipe(process.stdout)
       dps.download(resource, function (err) {
         if (err) return abort(err)
+        process.stdout.write('done!\n')
         console.log(resource)
       })
     })

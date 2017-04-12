@@ -9,7 +9,6 @@ var got = require('got')
 var rimraf = require('rimraf')
 var parallel = require('run-parallel')
 var fedsearch = require('federated-search')
-var download = require('./lib/download.js')
 var fetch = require('./lib/fetch.js')
 
 var CONFIG_FILE = 'dps.json'
