@@ -1,7 +1,11 @@
 var path = require('path')
-var events = require('events')
 var fs = require('fs')
+var mkdirp = require('mkdirp')
+var pump = require('pump')
 var util = require('util')
+var extend = require('extend')
+var debug = require('debug')('dps')
+var got = require('got')
 var rimraf = require('rimraf')
 var parallel = require('run-parallel')
 var fedsearch = require('federated-search')
@@ -17,31 +21,33 @@ function DPS (dir) {
   this.dir = dir || process.cwd()
   this.configPath = path.join(this.dir, CONFIG_FILE)
   this.config = readConfig(this.configPath)
-
-  events.EventEmitter.call(this)
 }
 
-util.inherits(DPS, events.EventEmitter)
+DPS.prototype.downloadLocation = function (resource)  {
+  var out = path.join(this.dir, resource.name)
+  return path.join(out, path.basename(resource.location))
+}
 
-DPS.prototype.download = function (location, args, cb) {
+DPS.prototype.download = function (resource, cb) {
   var self = this
-  var name = args.name || normalize(location) // should a name be required?
-  var existingResource = self.get({location: location}) || self.get({name: name})
-  if (existingResource) return self.updateResource(existingResource, cb)
+  var old = self.get(resource)
 
-  var resource = {
-    location: location,
-    type: args.type,
-    name: name
+  if (old && old.meta &&
+    new Date(old.meta.modified).toString() === resource.meta.modified.toString()) {
+    return cb(null, resource)
   }
-
-  download(self.dir, resource, function (err, resource) {
+  var reader = got.stream(resource.location)
+  var out = self.downloadLocation(resource)
+  var writer = fs.createWriteStream(out)
+  var stream = pump(reader, writer, function (err) {
+    if (err) return cb(err)
     addToConfig(self.config, resource)
     self.save(function (err) {
       if (err) return cb(err)
       return cb(null, resource)
     })
   })
+
 }
 
 DPS.prototype.add = function (location, args) {
@@ -55,15 +61,7 @@ DPS.prototype.update = function (cb) {
 }
 
 DPS.prototype.updateResource = function (resource, cb) {
-  var self = this
-  var i = self._get_index(resource)
-  download(self.dir, resource, function (err, newResource) {
-    self.config.resources[i] = newResource
-    self.save(function (err) {
-      if (err) return cb(err)
-      return cb(null, newResource)
-    })
-  })
+  this.download(resource, cb)
 }
 
 DPS.prototype.checkAll = function (cb) {
@@ -151,8 +149,4 @@ function readConfig (configPath) {
   return {
     resources: []
   }
-}
-
-function normalize (location) {
-  return location.replace('\/', '_').replace(/[^a-z_+A-Z0-9]/ig, '')
 }

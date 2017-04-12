@@ -4,22 +4,39 @@ var fs = require('fs')
 var path = require('path')
 var through = require('through2')
 var relativeDate = require('relative-date')
+var progress = require('progress-string')
+var diff = require('ansi-diff-stream')()
 var prettyBytes = require('pretty-bytes')
+var fetch = require('./lib/fetch')
 
 var dps = require('./')(args.path)
 exec(args._[0])
 
-function ondownload (err, resource) {
-  if (err) return abort(err)
-  console.log(resource)
-}
 
 function exec (cmd) {
   if (cmd === 'add') {
     var url = args._[1]
     if (!url || args.help) return usage('add')
     args.name = args.name || args.n || args._[2]
-    return dps.download(url, args, ondownload)
+
+    return fetch(url, args, function (err, resource) {
+      if (err) abort(err)
+      if (resource.size) {
+        var bar = progress({width: 25, total: resource.size})
+        var interval = setInterval(function () {
+          var loc = dps.downloadLocation(resource)
+          fs.lstat(loc, function (err, stat) {
+            var percentage = ((stat.size / resource.size) * 100).toFixed(2)
+            diff.write('[' + bar(stat.size) + `] ${percentage} %`)
+          })
+        }, 250)
+      }
+      diff.pipe(process.stdout)
+      dps.download(resource, function (err) {
+        if (err) return abort(err)
+        console.log(resource)
+      })
+    })
   }
 
   if (cmd === 'rm' || cmd === 'remove') {
@@ -45,7 +62,10 @@ function exec (cmd) {
       if (err) abort(err)
       done(data)
     }
-    dps.updateResource(resource, ondownload)
+    dps.updateResource(resource, function (err, resource) {
+      if (err) abort(err)
+      console.log(resource)
+    })
   }
 
   if (cmd === 'destroy') {
@@ -114,6 +134,7 @@ function done (message) {
 }
 
 function abort (err) {
+  console.error(err)
   console.trace(err)
   process.exit(1)
 }

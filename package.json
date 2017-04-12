@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/karissa/dps",
   "dependencies": {
+    "ansi-diff-stream": "^1.2.0",
     "cli-prompt": "^0.4.2",
     "dat-ping": "^1.1.0",
     "debug": "^2.2.0",
@@ -35,6 +36,7 @@
     "page": "^1.6.3",
     "pretty-bytes": "^2.0.1",
     "progress": "^1.1.8",
+    "progress-string": "^1.2.1",
     "pump": "^1.0.0",
     "ractive-toolkit": "^1.0.1",
     "relative-date": "^1.1.2",
