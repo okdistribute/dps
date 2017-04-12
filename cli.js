@@ -85,20 +85,6 @@ function exec (cmd) {
     })
   }
 
-  if (cmd === 'search') {
-    var query = args._[1]
-    if (args.help || !query) return usage('dps search <query>')
-    return dps.search(query).pipe(through.obj(function (results, enc, next) {
-      var output = ''
-      var searcher = results.searcher
-      for (var i in results.data.items) {
-        var result = results.data.items[i]
-        output += searcher.name + ' | ' + result.title + ' \n  ' + result.url + '\n\n'
-      }
-      next(null, output)
-    })).pipe(process.stdout)
-  }
-
   if (cmd === 'status' || cmd === 'st') {
     if (args.help) return usage('status')
     cb = function (err, data) {
