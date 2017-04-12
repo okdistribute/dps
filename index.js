@@ -32,7 +32,7 @@ DPS.prototype.download = function (resource, cb) {
   var old = self.get(resource)
 
   if (old && old.meta &&
-    new Date(old.meta.modified).toString() === resource.meta.modified.toString()) {
+    new Date(old.meta.modified) === resource.meta.modified) {
     return cb(null, resource)
   }
   var reader = got.stream(resource.location)

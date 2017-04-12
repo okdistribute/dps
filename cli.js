@@ -19,7 +19,14 @@ function exec (cmd) {
     if (!url || args.help) return usage('add')
     args.name = args.name || args.n || args._[2]
 
-    return fetch(url, args, function (err, resource) {
+    var name = args.name || normalize(location)
+    var resource = {
+      location: location,
+      type: args.type,
+      name: name
+    }
+
+    return fetch(resource, function (err, resource) {
       if (err) abort(err)
       process.stdout.write('Downloading...')
       if (resource.size) {
@@ -103,9 +110,9 @@ function exec (cmd) {
           output += '\n'
           output += resource.name + '\n'
           output += resource.location + '\n'
-          output += '  checked: ' + relativeDate(new Date(resource.meta.checked))
-          output += '  modified: ' + relativeDate(new Date(resource.meta.modified))
-          output += '  size: ' + prettyBytes(resource.size)
+          if (resource.meta.checked) output += '  checked: ' + relativeDate(new Date(resource.meta.checked))
+          if (resource.meta.modified) output += '  modified: ' + relativeDate(new Date(resource.meta.modified))
+          if (resource.size) output += '  size: ' + prettyBytes(resource.size)
           output += '\n'
           return console.log(output)
         }
